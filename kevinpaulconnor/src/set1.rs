@@ -18,6 +18,17 @@ fn fixed_xor(right_side: String, left_side: String) -> String {
     return hex::encode(&result);
 }
 
+pub fn solve_single_byte_xor_cipher() {
+    let message = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+    let unhexed_message = hex::decode(message).unwrap();
+    let mut test_byte: u8 = 0;
+    for i in 0..u8::max_value(){
+        println!("{}", test_byte);
+        test_byte = test_byte + 1;
+    }
+    //println!("{}", unhexed_message.len());
+}
+
 #[cfg(test)]
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
