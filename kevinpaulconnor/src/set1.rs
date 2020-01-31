@@ -43,13 +43,44 @@ fn score_sequence(bytes: &Vec<u8>, table: &HashMap<u8, i32>) -> i32 {
 
 //1.3
 pub fn solve_1_3() {
-    solve_single_byte_xor_cipher("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736".to_string());
+    let best_message = solve_single_byte_xor_cipher("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736".to_string());
+    print_message_score(best_message);
 }
 
-pub fn solve_single_byte_xor_cipher(message: String) {
+//would like to include this in the struct somehow
+fn print_message_score(message_score: MessageScore) {
+    let maybe_string = String::from_utf8(message_score.message);
+    if maybe_string.is_err() {
+        println!("best score of {} but the message wasn't printable", message_score.score)
+    } else {
+        println!("best score:{}, message: {}", message_score.score, maybe_string.unwrap())
+    }
+}
+
+struct MessageScore {
+    message: Vec<u8>,
+    score: i32
+}
+
+//1.4
+pub fn solve_1_4(contents: String) {
+    let mut best_message = MessageScore {
+        message: Vec::new(),
+        score: 0
+    };
+    let mut current_message: MessageScore;
+    for line in contents.lines() {
+        current_message = solve_single_byte_xor_cipher(line.to_string());
+        if current_message.score > best_message.score {
+            best_message = current_message;
+        }
+    }
+    print_message_score(best_message);
+}
+
+fn solve_single_byte_xor_cipher(message: String) -> MessageScore {
     let unhexed_message = hex::decode(message).unwrap();
     let mut test_byte: u8 = 0;
-    println!("{:?}", unhexed_message);
     // seeing if etaoin shrdlu *only* might be a shortcut
     // narrator: it was not. I didn't get the right answer until I
     // included spaces
@@ -93,10 +124,6 @@ pub fn solve_single_byte_xor_cipher(message: String) {
     score_table.insert(b'q', 1);
     score_table.insert(b'Q', 1);
 
-    struct MessageScore {
-        message: Vec<u8>,
-        score: i32
-    }
     let mut best_message = MessageScore {
         message: Vec::new(),
         score: 0
@@ -107,17 +134,12 @@ pub fn solve_single_byte_xor_cipher(message: String) {
         if score > best_message.score {
             best_message.score = score;
             best_message.message = xor_message;
-            let maybe_string = String::from_utf8(best_message.message);
-            if maybe_string.is_err() {
-                println!("new best score of {} but the message wasn't printable", score)
-            } else {
-                println!("new best score:{}, message: {}", score, maybe_string.unwrap())
-            }
         }
         if i < 255 {   
             test_byte = test_byte + 1;
         }    
     }
+    return best_message;
 }
 
 #[cfg(test)]
