@@ -42,8 +42,11 @@ fn score_sequence(bytes: &Vec<u8>, table: &HashMap<u8, i32>) -> i32 {
 }
 
 //1.3
-pub fn solve_single_byte_xor_cipher() {
-    let message = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+pub fn solve_1_3() {
+    solve_single_byte_xor_cipher("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736".to_string());
+}
+
+pub fn solve_single_byte_xor_cipher(message: String) {
     let unhexed_message = hex::decode(message).unwrap();
     let mut test_byte: u8 = 0;
     println!("{:?}", unhexed_message);
@@ -99,10 +102,8 @@ pub fn solve_single_byte_xor_cipher() {
         score: 0
     };
     for i in 0..256 {
-        //println!("trying byte {}...", i);
         let xor_message = xor_vector_against_single_byte(&unhexed_message, test_byte);
         let score = score_sequence(&xor_message, &score_table);
-        //println!("score: {}, xor_message: {:?}", score, xor_message);
         if score > best_message.score {
             best_message.score = score;
             best_message.message = xor_message;
@@ -117,7 +118,6 @@ pub fn solve_single_byte_xor_cipher() {
             test_byte = test_byte + 1;
         }    
     }
-    //println!("{}", unhexed_message.len());
 }
 
 #[cfg(test)]
