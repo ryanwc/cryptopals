@@ -1,4 +1,4 @@
 .DS_store
-CMakeFiles/*
+CMakeFiles/
 cmake_install.cmake
 CMakeCache.txt
