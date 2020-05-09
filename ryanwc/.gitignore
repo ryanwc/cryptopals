@@ -1,7 +1,13 @@
+# IDE/GUI
 .DS_store
+.vscode
+
+# build
 CMakeFiles/
 cmake_install.cmake
 CMakeCache.txt
+
+# dynamically downloaded/linked with cmake
 googletest-download/
 googletest-src/
 googletest-build/
