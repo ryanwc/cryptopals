@@ -6,6 +6,19 @@ https://cryptopals.com/
 
 All challenges implemented in C++.
 
+## Build Info
+
+- requires cmake and C++ 11 compiler
+
+Example building set 1 exercise 1:
+
+From dir `./set1/hex_to_base64`:
+
+- `cmake [desired flags]`
+- `make`
+
+Now the program and test program binaries are in `./set1/hex_to_base64/bin`.
+
 ## Set 1: Basics
 
 ### Why Base64 is Useful
