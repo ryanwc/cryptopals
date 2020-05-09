@@ -52,3 +52,10 @@ add_executable(test_hex_to_base64 ${TEST_SOURCE_FILES})
 
 target_link_libraries(test_hex_to_base64 gtest gtest_main)
 add_test(test_hex_to_base64 test_hex_to_base64)
+
+
+# put binaries in /bin
+set_target_properties( hex_to_base64 test_hex_to_base64
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin"
+)
