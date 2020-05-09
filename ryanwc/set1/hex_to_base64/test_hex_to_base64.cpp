@@ -10,12 +10,13 @@ namespace {
     TEST(ConvertHexCharToBitString_Test, IsValidHexChar_succeeds) {
         ASSERT_STREQ(std::string("0000").c_str(), convertHexCharToBitString('0').c_str());
         ASSERT_STREQ(std::string("1111").c_str(), convertHexCharToBitString('F').c_str());
+        ASSERT_STREQ(std::string("1111").c_str(), convertHexCharToBitString('f').c_str());
         ASSERT_STREQ(std::string("1010").c_str(), convertHexCharToBitString('A').c_str());
+        ASSERT_STREQ(std::string("1010").c_str(), convertHexCharToBitString('a').c_str());
     }
 
     TEST(ConvertHexCharToBitString_Test, InvalidHexChar_throws) {
         ASSERT_THROW(convertHexCharToBitString('Z'), std::invalid_argument);
-        ASSERT_THROW(convertHexCharToBitString('a'), std::invalid_argument);
         ASSERT_THROW(convertHexCharToBitString('&'), std::invalid_argument);
     }
 
@@ -53,6 +54,17 @@ namespace {
     TEST(ConvertSixBitStringToBase64Char_Test, NotBitString_throws) {
         ASSERT_THROW(convertSixBitStringToBase64Char("hel|O1"), std::invalid_argument);
         ASSERT_THROW(convertSixBitStringToBase64Char("101200"), std::invalid_argument);
+    }
+
+    TEST(ConvertHexxStringToBase64_Test, ShortString_succeeds) {
+        ASSERT_STREQ(std::string("TQ==").c_str(), convertHexStringToBase64("4D").c_str());
+    }
+
+    TEST(ConvertHexxStringToBase64_Test, LongString_succeeds) {
+        ASSERT_STREQ(
+            std::string("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t").c_str(), 
+            convertHexStringToBase64("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d").c_str()
+        );
     }
 
 }  // namespace
