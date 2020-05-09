@@ -1,5 +1,6 @@
 #include <math.h>
 #include <iostream>
+#include <vector>
 
 #include "hex_to_base64.h"
 
@@ -28,16 +29,22 @@ std::string convertHexCharToBitString(char hexChar) {
 		case '9':
 			return "1001";
 		case 'A':
+		case 'a':
 			return "1010";
 		case 'B':
+		case 'b':
 			return "1011";
 		case 'C':
+		case 'c':
 			return "1100";
 		case 'D':
+		case 'd':
 			return "1101";
 		case 'E':
+		case 'e':
 			return "1110";
 		case 'F':
+		case 'f':
 			return "1111";
 		default:
 			std::string errMessage = "given char is not hexadecimal char: ";
@@ -91,4 +98,37 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 	}
 
 	return ASCII_groupStartVal + groupOffset;
+}
+
+
+std::string convertHexStringToBase64(std::string hexString) {
+	// make a bitstring representation of the hex string
+	std::string bitString = "";
+	for (int i = 0; hexString[i] != '\0'; i++) {
+		bitString += convertHexCharToBitString(hexString[i]);
+	}
+
+	// convert bitstring to base64 chars with no padding
+	std::vector<char> base64Chars;
+	while (bitString.length() >= 6) {
+		base64Chars.push_back(convertSixBitStringToBase64Char(bitString.substr(0, 6)));
+		bitString = bitString.substr(6, bitString.length());
+	}
+
+	// deal with padding
+	if (bitString.length() > 0) {
+		// pad what's there with zeroes to get the final non-pad-char
+		while (bitString.length() < 6) {
+			bitString.push_back('0');
+		}
+		base64Chars.push_back(convertSixBitStringToBase64Char(bitString));
+
+		// base64 string with padding should have length multiple of 4
+		while (base64Chars.size() % 4 != 0) {
+			base64Chars.push_back('=');
+		}
+	}
+
+	std::string finalBase64String(base64Chars.begin(), base64Chars.end());
+	return finalBase64String;
 }

@@ -15,15 +15,7 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	std::string bitString = "";
-	std::vector<char> base64Vector;
-
-	// make a bitstring representation of the hex string
-	for (int i = 0; hexString[i] != '\0'; i++) {
-		bitString += convertHexCharToBitString(hexString[i]);
-	}
-
-	std::cout << bitString << std::endl;
+	std::cout << convertHexStringToBase64(hexString) << std::endl;
 
 	return EXIT_SUCCESS;
 }
