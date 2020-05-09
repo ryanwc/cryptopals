@@ -16,3 +16,9 @@ Seems bad, we're increasing the payload size.
 https://stackoverflow.com/questions/3538021/why-do-we-use-base64
 
 TLDR: Some ASCII characters may get corrupted when transferred across a network. So, use encoding to "known safe" ASCII chars.
+
+### Why Padding is Useful in Base64
+
+https://www.pixelstech.net/article/1457585550-How-does-Base64-work
+
+TLDR: Without padding, concatenating two Base64 encoded strings then decoding will give the wrong result.
