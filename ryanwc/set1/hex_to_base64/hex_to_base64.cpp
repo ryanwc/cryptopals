@@ -1,4 +1,5 @@
 #include <math.h>
+#include <iostream>
 
 #include "hex_to_base64.h"
 
@@ -56,7 +57,7 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 	double bitDecimalVal = 0;
 	for (int i = 0; i < 6; i++) {
 		if (sixBitString[i] == '1') {
-			bitDecimalVal += pow(2, 6 - i);
+			bitDecimalVal += pow(2, 5 - i);
 		}
 		else if (sixBitString[i] != '0') {
 			throw std::invalid_argument("given string is not a bit string: " + sixBitString);
@@ -65,23 +66,29 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 
 	// map the bit string value to an offset from the first base64 char ASCII val (65: 'A')
 	// we could use a big ol' hashmap or switch statement instead but that seems tedious
-	int capitalA_ASCII_val = 65;
-	int ASCII_offset;
-	if (bitDecimalVal <= 25) {
-		ASCII_offset = 0;  // capital letters
+	int ASCII_groupStartVal = 65;
+	int groupOffset;
+	int bitIntVal = int(bitDecimalVal);
+	if (bitDecimalVal < 26) {
+		ASCII_groupStartVal = 65;  // capital letters
+		groupOffset = bitIntVal;
 	}
-	else if (bitDecimalVal <= 51) {
-		ASCII_offset = 6;  // lower case letters
+	else if (bitDecimalVal < 52) {
+		ASCII_groupStartVal = 97;  // lower case letters
+		groupOffset = bitIntVal - 26;
 	}
-	else if (bitDecimalVal <= 61) {
-		ASCII_offset = -17;  // numbers
+	else if (bitDecimalVal < 62) {
+		ASCII_groupStartVal = 48;  // numbers
+		groupOffset = bitIntVal - 52;
 	}
 	else if (bitDecimalVal < 63) {
-		ASCII_offset = -22;  // + 
+		ASCII_groupStartVal = 43;  // + 
+		groupOffset = 0;
 	}
 	else {
-		ASCII_offset = -18;  // /
+		ASCII_groupStartVal = 47;  // /
+		groupOffset = 0;
 	}
 
-	return capitalA_ASCII_val + ASCII_offset + int(bitDecimalVal);
+	return ASCII_groupStartVal + groupOffset;
 }
