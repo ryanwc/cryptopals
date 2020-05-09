@@ -102,6 +102,11 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 
 
 std::string convertHexStringToBase64(std::string hexString) {
+
+	if (hexString.length() % 2 != 0) {
+		throw std::invalid_argument("purported hex string is not even length: " + hexString);
+	}
+
 	// make a bitstring representation of the hex string
 	std::string bitString = "";
 	for (int i = 0; hexString[i] != '\0'; i++) {

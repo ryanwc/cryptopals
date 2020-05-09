@@ -15,7 +15,13 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	std::cout << convertHexStringToBase64(hexString) << std::endl;
+	try {
+		std::cout << convertHexStringToBase64(hexString) << std::endl;
+	}
+	catch (std::invalid_argument err) {
+		std::cout << "conversion failed: " << err.what() << std::endl;
+		return EXIT_FAILURE;
+	}
 
 	return EXIT_SUCCESS;
 }
