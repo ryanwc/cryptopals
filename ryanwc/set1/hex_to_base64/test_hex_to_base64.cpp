@@ -15,6 +15,10 @@ namespace {
         ASSERT_STREQ(std::string("SKvW").c_str(), convertHexStringToBase64("48abd6").c_str());
     }
 
+    TEST(ConvertHexStringToBase64_Test, HandlesMixedCaps_succeeds) {
+        ASSERT_STREQ(std::string("SKvW").c_str(), convertHexStringToBase64("48aBd6").c_str());
+    }
+
     TEST(ConvertHexStringToBase64_Test, LongString_succeeds) {
         ASSERT_STREQ(
             std::string("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t").c_str(), 
