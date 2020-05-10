@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 		hexString = argv[1];
 	}
 	else {
-		std::cerr << "Correct usage: [$binary_name $hexString], example: [./hex_to_base64 4D2]" << std::endl;
+		std::cerr << "Correct usage: [$binary_name $hexString], example: [./hex_to_base64 4D]" << std::endl;
 		return EXIT_FAILURE;
 	}
 
