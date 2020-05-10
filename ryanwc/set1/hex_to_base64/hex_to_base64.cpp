@@ -143,7 +143,7 @@ inline void setBase64CharFromBits(bool bitArray[], int bitArrayStartPos, char ba
 
 	// map the decimal value, which represents its base64 char table index, to its contiguous ASCII group and offset within that group.
 	// we could use a big ol' hashmap or switch statement instead but that seems tedious.
-	// also, using an array like `return base64CharArray[int(bitDecimalVal)]` was actually a bit slower than this
+	// also, using a static mapping array like `base64CharArray[base64Index] = base64CharTable[int(bitDecimalVal)]` was actually a bit slower
 	int ASCII_groupStartVal;
 	int groupOffset;
 	int bitIntVal = int(bitDecimalVal);
