@@ -74,7 +74,8 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 	// map the bit string decimal value, which represents its base64 char table index,
 	// to its contiguous ASCII group and offset within that group.
 	// we could use a big ol' hashmap or switch statement instead but that seems tedious.
-	// maybe we could do bitshifting instead of working with bit strings but this overall approach seems OK performance
+	// maybe we could do bitshifting instead of working with bit strings but this overall approach seems OK performance.
+	// also, using an array like `return base64CharArray[int(bitDecimalVal)]` was actually a bit slower than this
 	int ASCII_groupStartVal;
 	int groupOffset;
 	int bitIntVal = int(bitDecimalVal);
