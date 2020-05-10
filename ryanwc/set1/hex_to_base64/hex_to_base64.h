@@ -4,13 +4,14 @@
 #include <iostream>
 
 
-// Convert a single hexadecimal character to a length-4 bitstring
-// e.g. 'A' gives "1010"
-std::string convertHexCharToBitString(char hexChar);
+// Set the bools in bitArray according to hexString
+// e.g. "4D" sets bitArray to {0, 0, 1, 0, 1, 1, 0, 1}
+// Assumes bitArray is correct length
+void setBitsFromHex(std::string hexString, bool bitArray[]);
 
-// Convert a length-6 bit string to a single base 64 character
-// e.g. "011001" gives 'Z'
-char convertSixBitStringToBase64Char(std::string sixBitString);
+// Set the base64CharArray[base64Index] according to bitArray[bitArrayStartPos:bitArrayStartPos+6]
+// e.g. if bitArray = {0, 0, 1, 0, 1, 1, 0, 1} and bitArrayStartPos = 0, then base64CharArray[base64Index] set to 'T' (bits "001011")
+void setBase64CharFromBits(bool bitArray[], int bitArrayStartPos, char base64CharArray[], int base64Index);
 
 // Convert a hexadecimal string to Base64 string (includes any padding chars)
 // e.g. "4D" gives "TQ=="

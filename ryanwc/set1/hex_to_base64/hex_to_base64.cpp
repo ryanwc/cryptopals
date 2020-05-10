@@ -4,112 +4,112 @@
 #include "hex_to_base64.h"
 
 
-inline void setBitsFromHex(std::string hexString, bool bitCharArray[]) {
+inline void setBitsFromHex(std::string hexString, bool bitArray[]) {
 
 	int bitArrPos = 0;
 	for (int hexStrPos = 0; hexStrPos < hexString.length(); hexStrPos++) {
 		switch (hexString[hexStrPos]) {
 			case '0':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case '1':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case '2':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case '3':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case '4':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case '5':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case '6':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case '7':
-				bitCharArray[bitArrPos] = 0;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 0;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case '8':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case '9':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case 'A':
 			case 'a':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case 'B':
 			case 'b':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 0;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 0;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case 'C':
 			case 'c':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case 'D':
 			case 'd':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 0;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 0;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			case 'E':
 			case 'e':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 0;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 0;
 				break;
 			case 'F':
 			case 'f':
-				bitCharArray[bitArrPos] = 1;
-				bitCharArray[bitArrPos+1] = 1;
-				bitCharArray[bitArrPos+2] = 1;
-				bitCharArray[bitArrPos+3] = 1;
+				bitArray[bitArrPos] = 1;
+				bitArray[bitArrPos+1] = 1;
+				bitArray[bitArrPos+2] = 1;
+				bitArray[bitArrPos+3] = 1;
 				break;
 			default:
 				std::string errMessage = "given hex string has invalid hexadecimal char: ";
@@ -122,7 +122,7 @@ inline void setBitsFromHex(std::string hexString, bool bitCharArray[]) {
 }
 
 
-inline void setBase64CharFromBitArray(bool bitArray[], int bitArrayStartPos, char base64CharArray[], int base64Index) {
+inline void setBase64CharFromBits(bool bitArray[], int bitArrayStartPos, char base64CharArray[], int base64Index) {
 
 	// convert bits to decimal value (pow returns double)
 	// maybe we could do bitshifting instead of working with bools but this overall approach seems OK performance.
@@ -191,7 +191,7 @@ std::string convertHexStringToBase64(std::string hexString) {
 	int bitIndex;
 	int base64CharIndex = 0;
 	for (bitIndex = 0; bitIndex < bitArrayLen - 6; bitIndex += 6) {
-		setBase64CharFromBitArray(bitArray, bitIndex, base64CharArray, base64CharIndex);
+		setBase64CharFromBits(bitArray, bitIndex, base64CharArray, base64CharIndex);
 		base64CharIndex += 1;
 	}
 
@@ -206,7 +206,7 @@ std::string convertHexStringToBase64(std::string hexString) {
 			padCharIndex += 1;
 		}
 
-		setBase64CharFromBitArray(finalCharBitArray, 0, base64CharArray, base64CharIndex);
+		setBase64CharFromBits(finalCharBitArray, 0, base64CharArray, base64CharIndex);
 		base64CharIndex += 1;
 
 		while (base64CharIndex < base64StrLen) {
