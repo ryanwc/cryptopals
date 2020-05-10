@@ -6,7 +6,7 @@
 
 
 namespace {
-
+/*
     TEST(ConvertHexCharToBitString_Test, IsValidHexChar_succeeds) {
         ASSERT_STREQ(std::string("0000").c_str(), convertHexCharToBitString('0').c_str());
         ASSERT_STREQ(std::string("1111").c_str(), convertHexCharToBitString('F').c_str());
@@ -56,6 +56,7 @@ namespace {
         ASSERT_THROW(convertSixBitStringToBase64Char("101200"), std::invalid_argument);
     }
 
+    */
     TEST(ConvertHexxStringToBase64_Test, ShortString_succeeds) {
         ASSERT_STREQ(std::string("TQ==").c_str(), convertHexStringToBase64("4D").c_str());
         ASSERT_STREQ(std::string("lj0=").c_str(), convertHexStringToBase64("963d").c_str());

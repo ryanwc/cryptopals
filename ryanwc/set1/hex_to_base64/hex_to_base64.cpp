@@ -1,80 +1,143 @@
 #include <math.h>
 #include <iostream>
-#include <vector>
 
 #include "hex_to_base64.h"
 
 
-std::string convertHexCharToBitString(char hexChar) {
+inline void setBitsFromHex(std::string hexString, bool bitCharArray[]) {
 
-	switch (hexChar) {
-		case '0':
-			return "0000";
-		case '1':
-			return "0001";
-		case '2':
-			return "0010";
-		case '3':
-			return "0011";
-		case '4':
-			return "0100";
-		case '5':
-			return "0101";
-		case '6':
-			return "0110";
-		case '7':
-			return "0111";
-		case '8':
-			return "1000";
-		case '9':
-			return "1001";
-		case 'A':
-		case 'a':
-			return "1010";
-		case 'B':
-		case 'b':
-			return "1011";
-		case 'C':
-		case 'c':
-			return "1100";
-		case 'D':
-		case 'd':
-			return "1101";
-		case 'E':
-		case 'e':
-			return "1110";
-		case 'F':
-		case 'f':
-			return "1111";
-		default:
-			std::string errMessage = "given char is not hexadecimal char: ";
-			errMessage.push_back(hexChar);
-			throw std::invalid_argument(errMessage);
+	int bitArrPos = 0;
+	for (int hexStrPos = 0; hexStrPos < hexString.length(); hexStrPos++) {
+		switch (hexString[hexStrPos]) {
+			case '0':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case '1':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case '2':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case '3':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case '4':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case '5':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case '6':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case '7':
+				bitCharArray[bitArrPos] = 0;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case '8':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case '9':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case 'A':
+			case 'a':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case 'B':
+			case 'b':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 0;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case 'C':
+			case 'c':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case 'D':
+			case 'd':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 0;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			case 'E':
+			case 'e':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 0;
+				break;
+			case 'F':
+			case 'f':
+				bitCharArray[bitArrPos] = 1;
+				bitCharArray[bitArrPos+1] = 1;
+				bitCharArray[bitArrPos+2] = 1;
+				bitCharArray[bitArrPos+3] = 1;
+				break;
+			default:
+				std::string errMessage = "given hex string has invalid hexadecimal char: ";
+				errMessage.push_back(hexString[hexStrPos]);
+				throw std::invalid_argument(errMessage);
+		}
+
+		bitArrPos += 4;
 	}
 }
 
 
-char convertSixBitStringToBase64Char(std::string sixBitString) {
+inline void setBase64CharFromBitArray(bool bitArray[], int bitArrayStartPos, char base64CharArray[], int base64Index) {
 
-	if (sixBitString.length() != 6) {
-		throw std::invalid_argument("given string is not length 6: " + sixBitString);
-	} 
-
-	// convert bit string to decimal value (pow returns double)
+	// convert bits to decimal value (pow returns double)
+	// maybe we could do bitshifting instead of working with bools but this overall approach seems OK performance.
 	double bitDecimalVal = 0;
 	for (int i = 0; i < 6; i++) {
-		if (sixBitString[i] == '1') {
+		if (bitArray[bitArrayStartPos + i] == 1) {
 			bitDecimalVal += pow(2, 5 - i);
 		}
-		else if (sixBitString[i] != '0') {
-			throw std::invalid_argument("given string is not a bit string: " + sixBitString);
+		else if (bitArray[bitArrayStartPos + i] != 0) {
+			throw std::invalid_argument("bit array is not bits");
 		}
 	}
 
-	// map the bit string decimal value, which represents its base64 char table index,
-	// to its contiguous ASCII group and offset within that group.
+	// map the decimal value, which represents its base64 char table index, to its contiguous ASCII group and offset within that group.
 	// we could use a big ol' hashmap or switch statement instead but that seems tedious.
-	// maybe we could do bitshifting instead of working with bit strings but this overall approach seems OK performance.
 	// also, using an array like `return base64CharArray[int(bitDecimalVal)]` was actually a bit slower than this
 	int ASCII_groupStartVal;
 	int groupOffset;
@@ -100,43 +163,60 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 		groupOffset = 0;
 	}
 
-	return ASCII_groupStartVal + groupOffset;
+	base64CharArray[base64Index] = ASCII_groupStartVal + groupOffset;
 }
 
 
 std::string convertHexStringToBase64(std::string hexString) {
 
-	if (hexString.length() % 2 != 0) {
+	int hexStringLen = hexString.length();
+
+	if (hexStringLen % 2 != 0) {
 		throw std::invalid_argument("purported hex string is not even length: " + hexString);
 	}
 
-	// make a bitstring representation of the hex string
-	std::string bitString = "";
-	for (int i = 0; hexString[i] != '\0'; i++) {
-		bitString += convertHexCharToBitString(hexString[i]);
+	int bitArrayLen = hexStringLen*4;
+	bool bitArray[bitArrayLen];
+	setBitsFromHex(hexString, bitArray);
+
+	int base64StrLen = bitArrayLen / 6;
+	if (bitArrayLen % 6 != 0) {
+		base64StrLen += 1;
+		while (base64StrLen % 4 != 0) {
+			base64StrLen += 1;
+		}
 	}
 
-	// convert bitstring to base64 chars with no padding
-	std::vector<char> base64Chars;
-	while (bitString.length() >= 6) {
-		base64Chars.push_back(convertSixBitStringToBase64Char(bitString.substr(0, 6)));
-		bitString = bitString.substr(6, bitString.length());
+	char base64CharArray[base64StrLen+1];  // +1 for null char string terminator
+	int bitIndex;
+	int base64CharIndex = 0;
+	for (bitIndex = 0; bitIndex < bitArrayLen - 6; bitIndex += 6) {
+		setBase64CharFromBitArray(bitArray, bitIndex, base64CharArray, base64CharIndex);
+		base64CharIndex += 1;
 	}
 
 	// deal with padding
-	if (bitString.length() > 0) {
+	if (bitIndex < bitArrayLen) {
 		// pad what's there with zeroes to get the final non-pad-char
-		while (bitString.length() < 6) {
-			bitString.push_back('0');
+		bool finalCharBitArray[] = {0, 0, 0, 0, 0, 0};
+		int padCharIndex = 0;
+		while (bitIndex < bitArrayLen) {
+			finalCharBitArray[padCharIndex] = bitArray[bitIndex];
+			bitIndex += 1;
+			padCharIndex += 1;
 		}
-		base64Chars.push_back(convertSixBitStringToBase64Char(bitString));
 
-		// base64 string with padding should have length multiple of 4
-		while (base64Chars.size() % 4 != 0) {
-			base64Chars.push_back('=');
+		setBase64CharFromBitArray(finalCharBitArray, 0, base64CharArray, base64CharIndex);
+		base64CharIndex += 1;
+
+		while (base64CharIndex < base64StrLen) {
+			base64CharArray[base64CharIndex] = '=';
+			base64CharIndex += 1;
 		}
 	}
 
-	std::string finalBase64String(base64Chars.begin(), base64Chars.end());
+	base64CharArray[base64CharIndex] = '\0';
+
+	std::string finalBase64String(base64CharArray);
 	return finalBase64String;
 }
