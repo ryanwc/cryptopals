@@ -71,9 +71,11 @@ char convertSixBitStringToBase64Char(std::string sixBitString) {
 		}
 	}
 
-	// map the bit string value to an offset from the first base64 char ASCII val (65: 'A')
-	// we could use a big ol' hashmap or switch statement instead but that seems tedious
-	int ASCII_groupStartVal = 65;
+	// map the bit string decimal value, which represents its base64 char table index,
+	// to its contiguous ASCII group and offset within that group.
+	// we could use a big ol' hashmap or switch statement instead but that seems tedious.
+	// maybe we could do bitshifting instead of working with bit strings but this overall approach seems OK performance
+	int ASCII_groupStartVal;
 	int groupOffset;
 	int bitIntVal = int(bitDecimalVal);
 	if (bitDecimalVal < 26) {
