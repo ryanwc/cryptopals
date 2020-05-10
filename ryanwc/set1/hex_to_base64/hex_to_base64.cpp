@@ -4,6 +4,9 @@
 #include "hex_to_base64.h"
 
 
+// Set the bools in bitArray according to hexString
+// e.g. "4D" sets bitArray to {0, 0, 1, 0, 1, 1, 0, 1}
+// Assumes bitArray is correct length
 inline void setBitsFromHex(std::string hexString, bool bitArray[]) {
 
 	int bitArrPos = 0;
@@ -122,6 +125,8 @@ inline void setBitsFromHex(std::string hexString, bool bitArray[]) {
 }
 
 
+// Set the base64CharArray[base64Index] according to bitArray[bitArrayStartPos:bitArrayStartPos+6]
+// e.g. if bitArray = {0, 0, 1, 0, 1, 1, 0, 1} and bitArrayStartPos = 0, then base64CharArray[base64Index] set to 'T' (bits "001011")
 inline void setBase64CharFromBits(bool bitArray[], int bitArrayStartPos, char base64CharArray[], int base64Index) {
 
 	// convert bits to decimal value (pow returns double)
