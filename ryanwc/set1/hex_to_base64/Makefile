@@ -56,41 +56,6 @@ CMAKE_BINARY_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -102,27 +67,16 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
 
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
 
-.PHONY : list_install_components/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -157,19 +111,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_hex_to_base64
-
-# Build rule for target.
-test_hex_to_base64: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_hex_to_base64
-.PHONY : test_hex_to_base64
-
-# fast build rule for target.
-test_hex_to_base64/fast:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/build
-.PHONY : test_hex_to_base64/fast
-
-#=============================================================================
 # Target rules for targets named hex_to_base64
 
 # Build rule for target.
@@ -183,56 +124,17 @@ hex_to_base64/fast:
 .PHONY : hex_to_base64/fast
 
 #=============================================================================
-# Target rules for targets named gmock_main
+# Target rules for targets named test_hex_to_base64
 
 # Build rule for target.
-gmock_main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gmock_main
-.PHONY : gmock_main
+test_hex_to_base64: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_hex_to_base64
+.PHONY : test_hex_to_base64
 
 # fast build rule for target.
-gmock_main/fast:
-	$(MAKE) -f googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
-.PHONY : gmock_main/fast
-
-#=============================================================================
-# Target rules for targets named gmock
-
-# Build rule for target.
-gmock: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gmock
-.PHONY : gmock
-
-# fast build rule for target.
-gmock/fast:
-	$(MAKE) -f googletest-build/googlemock/CMakeFiles/gmock.dir/build.make googletest-build/googlemock/CMakeFiles/gmock.dir/build
-.PHONY : gmock/fast
-
-#=============================================================================
-# Target rules for targets named gtest_main
-
-# Build rule for target.
-gtest_main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gtest_main
-.PHONY : gtest_main
-
-# fast build rule for target.
-gtest_main/fast:
-	$(MAKE) -f googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make googletest-build/googletest/CMakeFiles/gtest_main.dir/build
-.PHONY : gtest_main/fast
-
-#=============================================================================
-# Target rules for targets named gtest
-
-# Build rule for target.
-gtest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gtest
-.PHONY : gtest
-
-# fast build rule for target.
-gtest/fast:
-	$(MAKE) -f googletest-build/googletest/CMakeFiles/gtest.dir/build.make googletest-build/googletest/CMakeFiles/gtest.dir/build
-.PHONY : gtest/fast
+test_hex_to_base64/fast:
+	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/build
+.PHONY : test_hex_to_base64/fast
 
 hex_to_base64.o: hex_to_base64.cpp.o
 
@@ -240,8 +142,8 @@ hex_to_base64.o: hex_to_base64.cpp.o
 
 # target to build an object file
 hex_to_base64.cpp.o:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.o
 	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.o
+	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.o
 .PHONY : hex_to_base64.cpp.o
 
 hex_to_base64.i: hex_to_base64.cpp.i
@@ -250,8 +152,8 @@ hex_to_base64.i: hex_to_base64.cpp.i
 
 # target to preprocess a source file
 hex_to_base64.cpp.i:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.i
 	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.i
+	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.i
 .PHONY : hex_to_base64.cpp.i
 
 hex_to_base64.s: hex_to_base64.cpp.s
@@ -260,8 +162,8 @@ hex_to_base64.s: hex_to_base64.cpp.s
 
 # target to generate assembly for a file
 hex_to_base64.cpp.s:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.s
 	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.s
+	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.s
 .PHONY : hex_to_base64.cpp.s
 
 main.o: main.cpp.o
@@ -351,18 +253,10 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
-	@echo "... install/local"
-	@echo "... test_hex_to_base64"
-	@echo "... rebuild_cache"
-	@echo "... hex_to_base64"
 	@echo "... edit_cache"
-	@echo "... list_install_components"
-	@echo "... install"
-	@echo "... gmock_main"
-	@echo "... gmock"
-	@echo "... gtest_main"
-	@echo "... gtest"
+	@echo "... hex_to_base64"
+	@echo "... rebuild_cache"
+	@echo "... test_hex_to_base64"
 	@echo "... hex_to_base64.o"
 	@echo "... hex_to_base64.i"
 	@echo "... hex_to_base64.s"

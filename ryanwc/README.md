@@ -6,6 +6,11 @@ https://cryptopals.com/
 
 All challenges implemented in C++.
 
+## Testing
+
+The tests in this project use [googletest](https://github.com/google/googletest). There are multiple ways to include googletest in a project, but for
+simplicity I've installed it as a system library and linked against that for each test executable. See [here](https://github.com/google/googletest) for instructions on how to do that on Linux.
+
 ## Build Info
 
 - requires cmake and C++ 11 compiler
