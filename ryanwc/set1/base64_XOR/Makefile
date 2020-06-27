@@ -192,7 +192,7 @@ gmock_main: cmake_check_build_system
 
 # fast build rule for target.
 gmock_main/fast:
-	$(MAKE) -f googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
+	$(MAKE) -f /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
 .PHONY : gmock_main/fast
 
 #=============================================================================
@@ -205,7 +205,7 @@ gmock: cmake_check_build_system
 
 # fast build rule for target.
 gmock/fast:
-	$(MAKE) -f googletest-build/googlemock/CMakeFiles/gmock.dir/build.make googletest-build/googlemock/CMakeFiles/gmock.dir/build
+	$(MAKE) -f /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googlemock/CMakeFiles/gmock.dir/build
 .PHONY : gmock/fast
 
 #=============================================================================
@@ -218,7 +218,7 @@ gtest_main: cmake_check_build_system
 
 # fast build rule for target.
 gtest_main/fast:
-	$(MAKE) -f googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+	$(MAKE) -f /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
 #=============================================================================
@@ -231,7 +231,7 @@ gtest: cmake_check_build_system
 
 # fast build rule for target.
 gtest/fast:
-	$(MAKE) -f googletest-build/googletest/CMakeFiles/gtest.dir/build.make googletest-build/googletest/CMakeFiles/gtest.dir/build
+	$(MAKE) -f /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googletest/CMakeFiles/gtest.dir/build.make /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/google_test/googletest-build/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
 base64_XOR.o: base64_XOR.cpp.o
