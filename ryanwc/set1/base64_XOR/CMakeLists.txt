@@ -17,10 +17,3 @@ add_executable(test_base64_XOR ${TEST_SOURCE_FILES})
 
 target_link_libraries(test_base64_XOR gtest gtest_main pthread)
 add_test(test_base64_XOR test_base64_XOR)
-
-
-# put binaries in /bin
-set_target_properties( base64_XOR test_base64_XOR
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin"
-)

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/base64_XOR
+CMAKE_SOURCE_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/base64_XOR
+CMAKE_BINARY_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/base64_XOR/CMakeFiles /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/base64_XOR/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/base64_XOR/CMakeFiles 0
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/CMakeFiles /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/base64_XOR/CMakeFiles/progress.marks
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/base64_XOR/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/base64_XOR/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,43 +97,47 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/base64_XOR/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/base64_XOR/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named base64_XOR
+# Convenience name for target.
+set1/base64_XOR/CMakeFiles/base64_XOR.dir/rule:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/base64_XOR/CMakeFiles/base64_XOR.dir/rule
+.PHONY : set1/base64_XOR/CMakeFiles/base64_XOR.dir/rule
 
-# Build rule for target.
-base64_XOR: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 base64_XOR
+# Convenience name for target.
+base64_XOR: set1/base64_XOR/CMakeFiles/base64_XOR.dir/rule
+
 .PHONY : base64_XOR
 
 # fast build rule for target.
 base64_XOR/fast:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/build
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/build
 .PHONY : base64_XOR/fast
 
-#=============================================================================
-# Target rules for targets named test_base64_XOR
+# Convenience name for target.
+set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/rule:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/rule
+.PHONY : set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/rule
 
-# Build rule for target.
-test_base64_XOR: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_base64_XOR
+# Convenience name for target.
+test_base64_XOR: set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/rule
+
 .PHONY : test_base64_XOR
 
 # fast build rule for target.
 test_base64_XOR/fast:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/build
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build
 .PHONY : test_base64_XOR/fast
 
 base64_XOR.o: base64_XOR.cpp.o
@@ -142,8 +146,8 @@ base64_XOR.o: base64_XOR.cpp.o
 
 # target to build an object file
 base64_XOR.cpp.o:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/base64_XOR.cpp.o
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/base64_XOR.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/base64_XOR.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/base64_XOR.cpp.o
 .PHONY : base64_XOR.cpp.o
 
 base64_XOR.i: base64_XOR.cpp.i
@@ -152,8 +156,8 @@ base64_XOR.i: base64_XOR.cpp.i
 
 # target to preprocess a source file
 base64_XOR.cpp.i:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/base64_XOR.cpp.i
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/base64_XOR.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/base64_XOR.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/base64_XOR.cpp.i
 .PHONY : base64_XOR.cpp.i
 
 base64_XOR.s: base64_XOR.cpp.s
@@ -162,8 +166,8 @@ base64_XOR.s: base64_XOR.cpp.s
 
 # target to generate assembly for a file
 base64_XOR.cpp.s:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/base64_XOR.cpp.s
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/base64_XOR.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/base64_XOR.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/base64_XOR.cpp.s
 .PHONY : base64_XOR.cpp.s
 
 main.o: main.cpp.o
@@ -172,7 +176,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/main.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -181,7 +185,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/main.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -190,7 +194,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/base64_XOR.dir/build.make CMakeFiles/base64_XOR.dir/main.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 test_base64_XOR.o: test_base64_XOR.cpp.o
@@ -199,7 +203,7 @@ test_base64_XOR.o: test_base64_XOR.cpp.o
 
 # target to build an object file
 test_base64_XOR.cpp.o:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/test_base64_XOR.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/test_base64_XOR.cpp.o
 .PHONY : test_base64_XOR.cpp.o
 
 test_base64_XOR.i: test_base64_XOR.cpp.i
@@ -208,7 +212,7 @@ test_base64_XOR.i: test_base64_XOR.cpp.i
 
 # target to preprocess a source file
 test_base64_XOR.cpp.i:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/test_base64_XOR.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/test_base64_XOR.cpp.i
 .PHONY : test_base64_XOR.cpp.i
 
 test_base64_XOR.s: test_base64_XOR.cpp.s
@@ -217,7 +221,7 @@ test_base64_XOR.s: test_base64_XOR.cpp.s
 
 # target to generate assembly for a file
 test_base64_XOR.cpp.s:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/test_base64_XOR.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/test_base64_XOR.cpp.s
 .PHONY : test_base64_XOR.cpp.s
 
 test_main.o: test_main.cpp.o
@@ -226,7 +230,7 @@ test_main.o: test_main.cpp.o
 
 # target to build an object file
 test_main.cpp.o:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/test_main.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/test_main.cpp.o
 .PHONY : test_main.cpp.o
 
 test_main.i: test_main.cpp.i
@@ -235,7 +239,7 @@ test_main.i: test_main.cpp.i
 
 # target to preprocess a source file
 test_main.cpp.i:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/test_main.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/test_main.cpp.i
 .PHONY : test_main.cpp.i
 
 test_main.s: test_main.cpp.s
@@ -244,7 +248,7 @@ test_main.s: test_main.cpp.s
 
 # target to generate assembly for a file
 test_main.cpp.s:
-	$(MAKE) -f CMakeFiles/test_base64_XOR.dir/build.make CMakeFiles/test_base64_XOR.dir/test_main.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/test_main.cpp.s
 .PHONY : test_main.cpp.s
 
 # Help Target
@@ -280,6 +284,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

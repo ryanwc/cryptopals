@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex_to_base64
+CMAKE_SOURCE_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex_to_base64
+CMAKE_BINARY_DIR = /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex_to_base64/CMakeFiles /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex_to_base64/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex_to_base64/CMakeFiles 0
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/CMakeFiles /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/set1/hex_to_base64/CMakeFiles/progress.marks
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/hex_to_base64/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/hex_to_base64/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,43 +97,47 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/hex_to_base64/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/hex_to_base64/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named hex_to_base64
+# Convenience name for target.
+set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/rule:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/rule
+.PHONY : set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/rule
 
-# Build rule for target.
-hex_to_base64: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 hex_to_base64
+# Convenience name for target.
+hex_to_base64: set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/rule
+
 .PHONY : hex_to_base64
 
 # fast build rule for target.
 hex_to_base64/fast:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/build
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build
 .PHONY : hex_to_base64/fast
 
-#=============================================================================
-# Target rules for targets named test_hex_to_base64
+# Convenience name for target.
+set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/rule:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f CMakeFiles/Makefile2 set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/rule
+.PHONY : set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/rule
 
-# Build rule for target.
-test_hex_to_base64: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_hex_to_base64
+# Convenience name for target.
+test_hex_to_base64: set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/rule
+
 .PHONY : test_hex_to_base64
 
 # fast build rule for target.
 test_hex_to_base64/fast:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/build
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build
 .PHONY : test_hex_to_base64/fast
 
 hex_to_base64.o: hex_to_base64.cpp.o
@@ -142,8 +146,8 @@ hex_to_base64.o: hex_to_base64.cpp.o
 
 # target to build an object file
 hex_to_base64.cpp.o:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.o
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.o
 .PHONY : hex_to_base64.cpp.o
 
 hex_to_base64.i: hex_to_base64.cpp.i
@@ -152,8 +156,8 @@ hex_to_base64.i: hex_to_base64.cpp.i
 
 # target to preprocess a source file
 hex_to_base64.cpp.i:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.i
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.i
 .PHONY : hex_to_base64.cpp.i
 
 hex_to_base64.s: hex_to_base64.cpp.s
@@ -162,8 +166,8 @@ hex_to_base64.s: hex_to_base64.cpp.s
 
 # target to generate assembly for a file
 hex_to_base64.cpp.s:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.s
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/hex_to_base64.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/hex_to_base64.cpp.s
 .PHONY : hex_to_base64.cpp.s
 
 main.o: main.cpp.o
@@ -172,7 +176,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/main.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -181,7 +185,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/main.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -190,7 +194,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/hex_to_base64.dir/build.make CMakeFiles/hex_to_base64.dir/main.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 test_hex_to_base64.o: test_hex_to_base64.cpp.o
@@ -199,7 +203,7 @@ test_hex_to_base64.o: test_hex_to_base64.cpp.o
 
 # target to build an object file
 test_hex_to_base64.cpp.o:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/test_hex_to_base64.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_hex_to_base64.cpp.o
 .PHONY : test_hex_to_base64.cpp.o
 
 test_hex_to_base64.i: test_hex_to_base64.cpp.i
@@ -208,7 +212,7 @@ test_hex_to_base64.i: test_hex_to_base64.cpp.i
 
 # target to preprocess a source file
 test_hex_to_base64.cpp.i:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/test_hex_to_base64.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_hex_to_base64.cpp.i
 .PHONY : test_hex_to_base64.cpp.i
 
 test_hex_to_base64.s: test_hex_to_base64.cpp.s
@@ -217,7 +221,7 @@ test_hex_to_base64.s: test_hex_to_base64.cpp.s
 
 # target to generate assembly for a file
 test_hex_to_base64.cpp.s:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/test_hex_to_base64.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_hex_to_base64.cpp.s
 .PHONY : test_hex_to_base64.cpp.s
 
 test_main.o: test_main.cpp.o
@@ -226,7 +230,7 @@ test_main.o: test_main.cpp.o
 
 # target to build an object file
 test_main.cpp.o:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/test_main.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_main.cpp.o
 .PHONY : test_main.cpp.o
 
 test_main.i: test_main.cpp.i
@@ -235,7 +239,7 @@ test_main.i: test_main.cpp.i
 
 # target to preprocess a source file
 test_main.cpp.i:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/test_main.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_main.cpp.i
 .PHONY : test_main.cpp.i
 
 test_main.s: test_main.cpp.s
@@ -244,7 +248,7 @@ test_main.s: test_main.cpp.s
 
 # target to generate assembly for a file
 test_main.cpp.s:
-	$(MAKE) -f CMakeFiles/test_hex_to_base64.dir/build.make CMakeFiles/test_hex_to_base64.dir/test_main.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_main.cpp.s
 .PHONY : test_main.cpp.s
 
 # Help Target
@@ -280,6 +284,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
