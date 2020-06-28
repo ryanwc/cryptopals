@@ -13,7 +13,8 @@ simplicity I've installed it as a system library and linked against that for eac
 
 ## Build Info
 
-- requires cmake and C++ 11 compiler
+- uses CMake with top level project at root of dir and each individual challenge added as a subdirectory
+- requires cmake version 3.10+ and C++ 11 compiler
 
 Example building set 1 exercise 1:
 
