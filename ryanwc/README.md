@@ -41,3 +41,10 @@ TLDR: Some ASCII characters may get corrupted when transferred across a network.
 https://www.pixelstech.net/article/1457585550-How-does-Base64-work
 
 TLDR: Without padding, concatenating two Base64 encoded strings then decoding will give the wrong result.
+
+#### Challenge 1: Hex to Base 64
+
+- originally implementation translated hex string to array of bools representing the binary hex string val, then translated to base 64 from that
+  - this implementation was about 3x faster than another (working but unknown how much thought put into optimization) python implementation
+- new implementation translates hex string to array of uint64_t where the concatenation of binary vals of each uint64_t in the array represents the binary hex string val, then translates to base 64 from that
+  - new implementation was 4x faster than old implementation, so over an order of magnitude faster than the (again, maybe not optimized) python implementation
