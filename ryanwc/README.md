@@ -6,6 +6,14 @@ https://cryptopals.com/
 
 All challenges implemented in C++.
 
+## Web App
+
+The web_app dir has a Python Flask app. Right now it doesn't do much and isnt deployed. Eventually I will set up CICD that will compile/test/deploy the app on e.g. AWS so that there is a UI for people to use the completed crypto challenges.
+
+The idea is that Python is a pleasant language in which to develop web applications, but maybe not as fast as C++ for doing intense cryptography work. I already saw evidence of this, since my C++ implementation of challenge 1 is over 10x faster than a Python implementation I saw (but maybe that Python code isn't optimized at all).
+
+Regardless of the merit in this particular app, it is an interesting archicture that comes up in the real world (e.g., using C++ executable to do graphics rendering and writing a Python API to make the results available). So, I thought it would be fun to explore the possibilities here.
+
 ## Testing
 
 The tests in this project use [googletest](https://github.com/google/googletest). There are multiple ways to include googletest in a project, but for

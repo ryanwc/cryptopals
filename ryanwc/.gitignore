@@ -1,3 +1,7 @@
+# python stuff
+__pycache__/
+env/
+
 # IDE/GUI
 .DS_store
 .vscode
