@@ -137,30 +137,30 @@ test_hex_to_base64/fast:
 .PHONY : test_hex_to_base64/fast
 
 #=============================================================================
-# Target rules for targets named base64_XOR
+# Target rules for targets named hex_XOR
 
 # Build rule for target.
-base64_XOR: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 base64_XOR
-.PHONY : base64_XOR
+hex_XOR: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hex_XOR
+.PHONY : hex_XOR
 
 # fast build rule for target.
-base64_XOR/fast:
-	$(MAKE) -f set1/base64_XOR/CMakeFiles/base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/base64_XOR.dir/build
-.PHONY : base64_XOR/fast
+hex_XOR/fast:
+	$(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/build
+.PHONY : hex_XOR/fast
 
 #=============================================================================
-# Target rules for targets named test_base64_XOR
+# Target rules for targets named test_hex_XOR
 
 # Build rule for target.
-test_base64_XOR: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_base64_XOR
-.PHONY : test_base64_XOR
+test_hex_XOR: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_hex_XOR
+.PHONY : test_hex_XOR
 
 # fast build rule for target.
-test_base64_XOR/fast:
-	$(MAKE) -f set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build.make set1/base64_XOR/CMakeFiles/test_base64_XOR.dir/build
-.PHONY : test_base64_XOR/fast
+test_hex_XOR/fast:
+	$(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build
+.PHONY : test_hex_XOR/fast
 
 # Help Target
 help:
@@ -172,8 +172,8 @@ help:
 	@echo "... edit_cache"
 	@echo "... hex_to_base64"
 	@echo "... test_hex_to_base64"
-	@echo "... base64_XOR"
-	@echo "... test_base64_XOR"
+	@echo "... hex_XOR"
+	@echo "... test_hex_XOR"
 .PHONY : help
 
 

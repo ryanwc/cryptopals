@@ -5,11 +5,8 @@
 #include "hex_to_base64.h"
 
 
-namespace RyanHex {
+namespace CustomCrypto {
 
-	// Set the uint64s in bitArray according to hexString
-	// e.g. "4D" sets bitArray to array with one uint64 with value "0b00101101[0*56]".
-	// Assumes bitArray is correct length
 	inline void setBitsFromHex(std::string hexString, uint64_t bitArray[]) {
 
 		int bitArrPos = 0;

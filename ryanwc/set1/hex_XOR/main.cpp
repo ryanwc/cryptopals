@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "base64_XOR.h"
+#include "hex_XOR.h"
 
 
 int main(int argc, char** argv) {
@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 	}
 
 	try {
-		std::cout << XORbase64HexStrings(hexStringOne, hexStringTwo) << std::endl;
+		std::cout << CustomCrypto::XORhexStrings(hexStringOne, hexStringTwo) << std::endl;
 	}
 	catch (std::invalid_argument err) {
 		std::cout << "conversion failed: " << err.what() << std::endl;
