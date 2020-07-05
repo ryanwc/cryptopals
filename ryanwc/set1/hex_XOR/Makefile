@@ -140,35 +140,35 @@ test_hex_XOR/fast:
 	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build
 .PHONY : test_hex_XOR/fast
 
-__/hex_to_base64/hex_to_base64.o: __/hex_to_base64/hex_to_base64.cpp.o
+__/hex_to_base64/uint64_bits.o: __/hex_to_base64/uint64_bits.cpp.o
 
-.PHONY : __/hex_to_base64/hex_to_base64.o
+.PHONY : __/hex_to_base64/uint64_bits.o
 
 # target to build an object file
-__/hex_to_base64/hex_to_base64.cpp.o:
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/__/hex_to_base64/hex_to_base64.cpp.o
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/__/hex_to_base64/hex_to_base64.cpp.o
-.PHONY : __/hex_to_base64/hex_to_base64.cpp.o
+__/hex_to_base64/uint64_bits.cpp.o:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/__/hex_to_base64/uint64_bits.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/__/hex_to_base64/uint64_bits.cpp.o
+.PHONY : __/hex_to_base64/uint64_bits.cpp.o
 
-__/hex_to_base64/hex_to_base64.i: __/hex_to_base64/hex_to_base64.cpp.i
+__/hex_to_base64/uint64_bits.i: __/hex_to_base64/uint64_bits.cpp.i
 
-.PHONY : __/hex_to_base64/hex_to_base64.i
+.PHONY : __/hex_to_base64/uint64_bits.i
 
 # target to preprocess a source file
-__/hex_to_base64/hex_to_base64.cpp.i:
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/__/hex_to_base64/hex_to_base64.cpp.i
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/__/hex_to_base64/hex_to_base64.cpp.i
-.PHONY : __/hex_to_base64/hex_to_base64.cpp.i
+__/hex_to_base64/uint64_bits.cpp.i:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/__/hex_to_base64/uint64_bits.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/__/hex_to_base64/uint64_bits.cpp.i
+.PHONY : __/hex_to_base64/uint64_bits.cpp.i
 
-__/hex_to_base64/hex_to_base64.s: __/hex_to_base64/hex_to_base64.cpp.s
+__/hex_to_base64/uint64_bits.s: __/hex_to_base64/uint64_bits.cpp.s
 
-.PHONY : __/hex_to_base64/hex_to_base64.s
+.PHONY : __/hex_to_base64/uint64_bits.s
 
 # target to generate assembly for a file
-__/hex_to_base64/hex_to_base64.cpp.s:
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/__/hex_to_base64/hex_to_base64.cpp.s
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/__/hex_to_base64/hex_to_base64.cpp.s
-.PHONY : __/hex_to_base64/hex_to_base64.cpp.s
+__/hex_to_base64/uint64_bits.cpp.s:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/hex_XOR.dir/__/hex_to_base64/uint64_bits.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/__/hex_to_base64/uint64_bits.cpp.s
+.PHONY : __/hex_to_base64/uint64_bits.cpp.s
 
 hex_XOR.o: hex_XOR.cpp.o
 
@@ -291,9 +291,9 @@ help:
 	@echo "... hex_XOR"
 	@echo "... rebuild_cache"
 	@echo "... test_hex_XOR"
-	@echo "... __/hex_to_base64/hex_to_base64.o"
-	@echo "... __/hex_to_base64/hex_to_base64.i"
-	@echo "... __/hex_to_base64/hex_to_base64.s"
+	@echo "... __/hex_to_base64/uint64_bits.o"
+	@echo "... __/hex_to_base64/uint64_bits.i"
+	@echo "... __/hex_to_base64/uint64_bits.s"
 	@echo "... hex_XOR.o"
 	@echo "... hex_XOR.i"
 	@echo "... hex_XOR.s"

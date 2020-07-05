@@ -5,13 +5,14 @@ set (CMAKE_CXX_STANDARD 11)
 
 project(hex_to_base64)
 
-set(SOURCE_FILES main.cpp hex_to_base64.cpp hex_to_base64.h)
+set(NON_MAIN_SOURCE_FILES hex_to_base64.h hex_to_base64.cpp uint64_bits.h uint64_bits.cpp)
+set(SOURCE_FILES main.cpp ${NON_MAIN_SOURCE_FILES})
 
 # the actual program
 add_executable(hex_to_base64 ${SOURCE_FILES})
 
 # link against gtest or gtest_main as needed
-set(TEST_SOURCE_FILES test_main.cpp test_hex_to_base64.cpp hex_to_base64.cpp hex_to_base64.h)
+set(TEST_SOURCE_FILES test_main.cpp test_hex_to_base64.cpp ${NON_MAIN_SOURCE_FILES})
 
 add_executable(test_hex_to_base64 ${TEST_SOURCE_FILES})
 

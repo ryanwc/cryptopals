@@ -1,4 +1,5 @@
 #include <iostream>
+//#include <chrono>
 
 #include "hex_to_base64.h"
 
@@ -15,7 +16,7 @@ int main(int argc, char** argv) {
 	}
 
 	try {
-		std::cout << CustomCrypto::convertHexStringToBase64(hexString) << std::endl;
+		std::cout << CustomCrypto::ConvertHexStringToBase64(hexString) << std::endl;
 	}
 	catch (std::invalid_argument err) {
 		std::cout << "conversion failed: " << err.what() << std::endl;
@@ -27,7 +28,7 @@ int main(int argc, char** argv) {
 	int numExecutions = 10000;
 	auto start = std::chrono::high_resolution_clock::now();
 	while (currExecution < numExecutions) {
-		CustomCrypto::convertHexStringToBase64("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d");
+		CustomCrypto::ConvertHexStringToBase64("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d");
 		currExecution += 1;
 	}
 	auto stop = std::chrono::high_resolution_clock::now();

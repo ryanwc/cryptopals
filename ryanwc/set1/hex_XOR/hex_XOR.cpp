@@ -9,6 +9,7 @@ namespace CustomCrypto {
 
 	std::string XORhexStrings(std::string hexStringOne, std::string hexStringTwo) {
 
+		
 		return "";
 	}
 }

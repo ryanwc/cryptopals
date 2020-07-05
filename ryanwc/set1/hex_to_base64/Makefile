@@ -251,6 +251,36 @@ test_main.cpp.s:
 	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_main.cpp.s
 .PHONY : test_main.cpp.s
 
+uint64_bits.o: uint64_bits.cpp.o
+
+.PHONY : uint64_bits.o
+
+# target to build an object file
+uint64_bits.cpp.o:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/uint64_bits.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/uint64_bits.cpp.o
+.PHONY : uint64_bits.cpp.o
+
+uint64_bits.i: uint64_bits.cpp.i
+
+.PHONY : uint64_bits.i
+
+# target to preprocess a source file
+uint64_bits.cpp.i:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/uint64_bits.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/uint64_bits.cpp.i
+.PHONY : uint64_bits.cpp.i
+
+uint64_bits.s: uint64_bits.cpp.s
+
+.PHONY : uint64_bits.s
+
+# target to generate assembly for a file
+uint64_bits.cpp.s:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/uint64_bits.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/uint64_bits.cpp.s
+.PHONY : uint64_bits.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -273,6 +303,9 @@ help:
 	@echo "... test_main.o"
 	@echo "... test_main.i"
 	@echo "... test_main.s"
+	@echo "... uint64_bits.o"
+	@echo "... uint64_bits.i"
+	@echo "... uint64_bits.s"
 .PHONY : help
 
 
