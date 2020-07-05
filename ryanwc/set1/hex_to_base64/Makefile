@@ -140,6 +140,36 @@ test_hex_to_base64/fast:
 	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build
 .PHONY : test_hex_to_base64/fast
 
+__/__/crypto_lib/uint64_bits.o: __/__/crypto_lib/uint64_bits.cpp.o
+
+.PHONY : __/__/crypto_lib/uint64_bits.o
+
+# target to build an object file
+__/__/crypto_lib/uint64_bits.cpp.o:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/__/__/crypto_lib/uint64_bits.cpp.o
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/__/__/crypto_lib/uint64_bits.cpp.o
+.PHONY : __/__/crypto_lib/uint64_bits.cpp.o
+
+__/__/crypto_lib/uint64_bits.i: __/__/crypto_lib/uint64_bits.cpp.i
+
+.PHONY : __/__/crypto_lib/uint64_bits.i
+
+# target to preprocess a source file
+__/__/crypto_lib/uint64_bits.cpp.i:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/__/__/crypto_lib/uint64_bits.cpp.i
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/__/__/crypto_lib/uint64_bits.cpp.i
+.PHONY : __/__/crypto_lib/uint64_bits.cpp.i
+
+__/__/crypto_lib/uint64_bits.s: __/__/crypto_lib/uint64_bits.cpp.s
+
+.PHONY : __/__/crypto_lib/uint64_bits.s
+
+# target to generate assembly for a file
+__/__/crypto_lib/uint64_bits.cpp.s:
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/__/__/crypto_lib/uint64_bits.cpp.s
+	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/__/__/crypto_lib/uint64_bits.cpp.s
+.PHONY : __/__/crypto_lib/uint64_bits.cpp.s
+
 hex_to_base64.o: hex_to_base64.cpp.o
 
 .PHONY : hex_to_base64.o
@@ -251,36 +281,6 @@ test_main.cpp.s:
 	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/test_main.cpp.s
 .PHONY : test_main.cpp.s
 
-uint64_bits.o: uint64_bits.cpp.o
-
-.PHONY : uint64_bits.o
-
-# target to build an object file
-uint64_bits.cpp.o:
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/uint64_bits.cpp.o
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/uint64_bits.cpp.o
-.PHONY : uint64_bits.cpp.o
-
-uint64_bits.i: uint64_bits.cpp.i
-
-.PHONY : uint64_bits.i
-
-# target to preprocess a source file
-uint64_bits.cpp.i:
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/uint64_bits.cpp.i
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/uint64_bits.cpp.i
-.PHONY : uint64_bits.cpp.i
-
-uint64_bits.s: uint64_bits.cpp.s
-
-.PHONY : uint64_bits.s
-
-# target to generate assembly for a file
-uint64_bits.cpp.s:
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/hex_to_base64.dir/uint64_bits.cpp.s
-	cd /mnt/hgfs/cs6210_AOS/non_omscs/classix-crypto/ryanwc && $(MAKE) -f set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/build.make set1/hex_to_base64/CMakeFiles/test_hex_to_base64.dir/uint64_bits.cpp.s
-.PHONY : uint64_bits.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -291,6 +291,9 @@ help:
 	@echo "... hex_to_base64"
 	@echo "... rebuild_cache"
 	@echo "... test_hex_to_base64"
+	@echo "... __/__/crypto_lib/uint64_bits.o"
+	@echo "... __/__/crypto_lib/uint64_bits.i"
+	@echo "... __/__/crypto_lib/uint64_bits.s"
 	@echo "... hex_to_base64.o"
 	@echo "... hex_to_base64.i"
 	@echo "... hex_to_base64.s"
@@ -303,9 +306,6 @@ help:
 	@echo "... test_main.o"
 	@echo "... test_main.i"
 	@echo "... test_main.s"
-	@echo "... uint64_bits.o"
-	@echo "... uint64_bits.i"
-	@echo "... uint64_bits.s"
 .PHONY : help
 
 

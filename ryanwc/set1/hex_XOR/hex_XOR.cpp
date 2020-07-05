@@ -1,7 +1,7 @@
 #include <math.h>
 #include <iostream>
 
-#include "../hex_to_base64/hex_to_base64.h"
+#include "../../crypto_lib/uint64_bits.h"
 #include "hex_XOR.h"
 
 

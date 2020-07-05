@@ -5,7 +5,7 @@ set (CMAKE_CXX_STANDARD 11)
 
 project(hex_to_base64)
 
-set(NON_MAIN_SOURCE_FILES hex_to_base64.h hex_to_base64.cpp uint64_bits.h uint64_bits.cpp)
+set(NON_MAIN_SOURCE_FILES hex_to_base64.h hex_to_base64.cpp ../../crypto_lib/uint64_bits.h ../../crypto_lib/uint64_bits.cpp)
 set(SOURCE_FILES main.cpp ${NON_MAIN_SOURCE_FILES})
 
 # the actual program

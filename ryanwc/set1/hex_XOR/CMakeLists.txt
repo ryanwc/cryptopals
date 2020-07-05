@@ -6,7 +6,7 @@ set (CMAKE_CXX_STANDARD 11)
 project(hex_XOR)
 
 # uses a function from challenge 1
-set(NON_MAIN_SOURCE_FILES hex_XOR.cpp hex_XOR.h ../hex_to_base64/uint64_bits.cpp ../hex_to_base64/uint64_bits.h)
+set(NON_MAIN_SOURCE_FILES hex_XOR.cpp hex_XOR.h ../../crypto_lib/uint64_bits.cpp ../../crypto_lib/uint64_bits.h)
 set(SOURCE_FILES main.cpp ${NON_MAIN_SOURCE_FILES})
 
 
