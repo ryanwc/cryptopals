@@ -17,9 +17,28 @@ namespace CustomCrypto {
         _hexRepresentation = NULL;
         _base64Representation = NULL;
         _numBits = 0;
+        _numPaddingBits = 0;
+        _numUint64s = 0;
         _sourceString = sourceString;
         _sourceType = sourceType;
         _setBitsFromSource();
+    }
+
+    Uint64Bits::Uint64Bits(std::unique_ptr<uint64_t> bits, int numBits) {
+        int arrSize = int(ceil(numBits / 64)) + 1;  // extra one for dealing with base64 stuff
+        _bits = (uint64_t*) malloc(sizeof(uint64_t) * arrSize);
+        uint64_t* nakedBitsPtr = bits.get();
+        for (int i = 0; i < arrSize; i++) {
+            _bits[i] = nakedBitsPtr[i];
+        }
+
+        _hexRepresentation = NULL;
+        _base64Representation = NULL;
+        _numBits = numBits;
+        _numUint64s = arrSize;
+        _numPaddingBits = 0;
+        _sourceString = "";
+        _sourceType = "bits";
     }
 
     Uint64Bits::~Uint64Bits() {
@@ -36,6 +55,10 @@ namespace CustomCrypto {
 
     int Uint64Bits::GetNumBits() {
         return _numBits;
+    }
+
+    int Uint64Bits::GetNumUint64s() {
+        return _numUint64s;
     }
 
     std::string Uint64Bits::GetBase64Representation() {
@@ -60,10 +83,34 @@ namespace CustomCrypto {
         throw std::runtime_error("get hex representation not implemented for non-hex source");
     }
 
-    std::shared_ptr<uint64_t*> Uint64Bits::GetBits() {
-        throw std::runtime_error("not implemented");
+    std::unique_ptr<uint64_t[]> Uint64Bits::GetBits() {
+
+        int bitsArrLen = int(ceil(_numBits / 64.0)) + 1;
+        std::unique_ptr<uint64_t[]> bitsCopy(new uint64_t[bitsArrLen]);  // C++ 17 allows this syntax and will delete array appropriately
+        uint64_t* rawPtr = bitsCopy.get();
+        for (int i = 0; i < bitsArrLen; i++) {
+            rawPtr[i] = _bits[i];
+        }
+        return bitsCopy;
     }
 
+    Uint64Bits Uint64Bits::XOR(Uint64Bits otherBits) {
+
+        int numMyUint64s = int(ceil(_numBits / 64.0));
+
+        int numOtherBits = otherBits.GetNumBits();
+        int numOtherUint64s = int(ceil(numOtherBits / 64.0));
+        std::unique_ptr<uint64_t[]> otherBitsUniquePtr = otherBits.GetBits();
+        uint64_t* otherBitsRawPtr = otherBitsUniquePtr.get();
+
+        // could memoize this (and maybe provide public accessor) if needed a lot
+        uint64_t* myRightAlignedBits[numMyUint64s];
+
+        // iterate and do xors
+        // make and return new obj
+
+        return otherBits;
+    }
 
     void Uint64Bits::_setBitsFromSource() {
         if (_sourceType.compare("hex") == 0) {
@@ -73,9 +120,6 @@ namespace CustomCrypto {
 
     inline void Uint64Bits::_setBitsFromHex() {
 
-        int bitArrPos = 0;
-        int bitsLeftInPos = 64;
-
         int srcStrLen = _sourceString.length();
 
 		if (srcStrLen % 2 != 0) {
@@ -83,102 +127,85 @@ namespace CustomCrypto {
 		}
 
         _numBits = srcStrLen * 4;
-        int numSetBitsInLast64 = _numBits % 64;
-        int uint64ArrayLen = int(ceil(_numBits / 64.0)) + 1;
+        _numUint64s = int(ceil(_numBits / 64.0));
+        _bits = (uint64_t*) malloc(sizeof(uint64_t) * _numUint64s);  
 
-        if (_bits) {
-            free(_bits);
-        }
-        if (_base64Representation) {
-            free(_base64Representation);
-            _base64Representation = NULL;
-        }
-        if (_hexRepresentation) {
-            free(_hexRepresentation);
-            _hexRepresentation = NULL;
-        }
-
-        _bits = (uint64_t*) malloc(sizeof(uint64_t) * (uint64ArrayLen+1));  // plus one for base64 convience, see below
-
-        _bits[0] = 0b0;
-
-        int sourceStrPos = 0;
-        while (sourceStrPos < srcStrLen) {
-            _bits[bitArrPos] <<= 4;
+        _bits[_numUint64s-1] = 0b0;
+        int sourceStrPos = srcStrLen - 1;
+        int bitArrPos = _numUint64s - 1;
+        int bitsAssignedThis64 = 0;
+        uint64_t nextVal;
+        while (sourceStrPos >= 0) {
             switch (_sourceString[sourceStrPos]) {
                 case '0':
-                    _bits[bitArrPos] |= 0b0000;
+                    nextVal = 0b0000;
                     break;
                 case '1':
-                    _bits[bitArrPos] |= 0b0001;
+                    nextVal = 0b0001;
                     break;
                 case '2':
-                    _bits[bitArrPos] |= 0b0010;
+                    nextVal = 0b0010;
                     break;
                 case '3':
-                    _bits[bitArrPos] |= 0b0011;
+                    nextVal = 0b0011;
                     break;
                 case '4':
-                    _bits[bitArrPos] |= 0b0100;
+                    nextVal = 0b0100;
                     break;
                 case '5':
-                    _bits[bitArrPos] |= 0b0101;
+                    nextVal = 0b0101;
                     break;
                 case '6':
-                    _bits[bitArrPos] |= 0b0110;
+                    nextVal = 0b0110;
                     break;
                 case '7':
-                    _bits[bitArrPos] |= 0b0111;
+                    nextVal = 0b0111;
                     break;
                 case '8':
-                    _bits[bitArrPos] |= 0b1000;
+                    nextVal = 0b1000;
                     break;
                 case '9':
-                    _bits[bitArrPos] |= 0b1001;
+                    nextVal = 0b1001;
                     break;
                 case 'A':
                 case 'a':
-                    _bits[bitArrPos] |= 0b1010;
+                    nextVal = 0b1010;
                     break;
                 case 'B':
                 case 'b':
-                    _bits[bitArrPos] |= 0b1011;
+                    nextVal = 0b1011;
                     break;
                 case 'C':
                 case 'c':
-                    _bits[bitArrPos] |= 0b1100;
+                    nextVal = 0b1100;
                     break;
                 case 'D':
                 case 'd':
-                    _bits[bitArrPos] |= 0b1101;
+                    nextVal = 0b1101;
                     break;
                 case 'E':
                 case 'e':
-                    _bits[bitArrPos] |= 0b1110;
+                    nextVal = 0b1110;
                     break;
                 case 'F':
                 case 'f':
-                    _bits[bitArrPos] |= 0b1111;
+                    nextVal = 0b1111;
                     break;
                 default:
                     std::string errMessage = "given hex string has invalid hexadecimal char: ";
                     errMessage.push_back(_sourceString[sourceStrPos]);
                     throw std::invalid_argument(errMessage);
             }
-
-            sourceStrPos += 1;
-            bitsLeftInPos -= 4;
-            if (bitsLeftInPos < 1) {
-                bitArrPos += 1;
+            _bits[bitArrPos] |= nextVal << bitsAssignedThis64;
+            sourceStrPos -= 1;
+            bitsAssignedThis64 += 4;
+            if (bitsAssignedThis64 >= 64) {
+                bitArrPos -= 1;
                 _bits[bitArrPos] = 0b0;
-                bitsLeftInPos = 64;
-            } 
+                bitsAssignedThis64 = 0;
+            }
         }
-
-        // put trailing 0s for convenience when converting to base64
-        _bits[uint64ArrayLen-1] = 0b0;
-        // ensure bits we care about in last uint64 are most significant
-        _bits[uint64ArrayLen-2] <<= 64 - numSetBitsInLast64;
+        _numPaddingBits = bitsAssignedThis64 > 0 ? (64 - bitsAssignedThis64) : 0;
     }
 
     // Set the base64CharArray[base64Index] according to bitArray[bitArrayStartPos:bitArrayStartPos+6]
@@ -212,6 +239,10 @@ namespace CustomCrypto {
             bitVal = intermediate >> 2;
         }
 
+        base64CharArray[base64Index] = _getBase64CharFromBitVal(bitVal);
+    }
+
+    inline char Uint64Bits::_getBase64CharFromBitVal(uint8_t bitVal) {
         // map the decimal value, which represents its base64 char table index, to its contiguous ASCII group and offset within that group.
         // we could use a big ol' hashmap or switch statement instead but that seems tedious.
         // also, using a static mapping array like `base64CharArray[base64Index] = base64CharTable[int(bitDecimalVal)]` was actually a bit slower
@@ -238,14 +269,16 @@ namespace CustomCrypto {
             groupOffset = 0;
         }
 
-        base64CharArray[base64Index] = ASCII_groupStartVal + groupOffset;
+        return ASCII_groupStartVal + groupOffset;
     }
 
     void Uint64Bits::_setBase64StrFromBits() {
 
-        int numBase64Chars = _numBits / 6;
-        int base64StrLen = numBase64Chars;
-        if (_numBits % 6 != 0) {
+        int base64StrLen = _numBits / 6;
+        int numPaddingZeroes = 0;
+        int overflow = _numBits % 6;
+        if (overflow != 0) {
+            numPaddingZeroes = 6 - overflow;
             base64StrLen += 1;
             while (base64StrLen % 4 != 0) {
                 base64StrLen += 1;
@@ -253,12 +286,14 @@ namespace CustomCrypto {
         }
 
         _base64Representation = (char*) malloc(sizeof(char) * (base64StrLen+1));  // +1 for null char string terminator
-        int numBitsConverted;
         int uint64ArrIndex = 0;
         int base64CharIndex = 0;
-        int uintBitStartPos = 0;
-        for (numBitsConverted = 0; numBitsConverted < _numBits; numBitsConverted += 6) {
+        int uintBitStartPos = _numPaddingBits;
+        int numBitsConverted = 0;
+        int bitsToConvert = numPaddingZeroes > 0 ? _numBits - (6 - numPaddingZeroes) : _numBits;
+        while (numBitsConverted < bitsToConvert) {
             _setBase64CharFromBits(_bits, uint64ArrIndex, uintBitStartPos, _base64Representation, base64CharIndex);
+            numBitsConverted += 6;
             base64CharIndex += 1;
             uintBitStartPos += 6;
             if (uintBitStartPos >= 64) {
@@ -266,6 +301,15 @@ namespace CustomCrypto {
                 uintBitStartPos -= 64;
                 uint64ArrIndex += 1;
             }
+        }
+
+        if (numPaddingZeroes > 0) {
+            // get last bits and pad with zeros
+            uint8_t lastBits = _bits[_numUint64s-1];
+            uint8_t intermediate = lastBits << (2 + numPaddingZeroes);
+            lastBits = intermediate >> 2;
+            _base64Representation[base64CharIndex] = _getBase64CharFromBitVal(lastBits);
+            base64CharIndex += 1;
         }
 
         while (base64CharIndex < base64StrLen) {

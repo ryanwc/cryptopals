@@ -6,6 +6,7 @@
 
 namespace CustomCrypto {
 
+    // Cryptopals Set 1, Challenge 2
     // Get the hexadecimal string representing XOR of two given hexadecimal strings
     // e.g. "4D, 4D" gives "0"
     std::string XORhexStrings(std::string hexStringOne, std::string hexStringTwo);

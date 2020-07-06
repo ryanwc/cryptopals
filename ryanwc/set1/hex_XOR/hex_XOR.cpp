@@ -9,7 +9,9 @@ namespace CustomCrypto {
 
 	std::string XORhexStrings(std::string hexStringOne, std::string hexStringTwo) {
 
-		
-		return "";
+		CustomCrypto::Uint64Bits bitsOne(hexStringOne, "hex");
+		CustomCrypto::Uint64Bits bitsTwo(hexStringTwo, "hex");
+		CustomCrypto::Uint64Bits xorBits = bitsOne.XOR(bitsTwo);
+		return xorBits.GetHexRepresentation();
 	}
 }
