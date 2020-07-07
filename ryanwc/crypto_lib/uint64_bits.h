@@ -17,6 +17,7 @@ namespace CustomCrypto {
 
             Uint64Bits(std::string sourceString, std::string sourceType);
             Uint64Bits(std::unique_ptr<uint64_t> bits, int numBits);
+            ~Uint64Bits();
 
 			// Get the total number of bits this Uint64Bits represents
             int GetNumBits() const;
@@ -38,7 +39,7 @@ namespace CustomCrypto {
             // Right aligned, so padded with zeroes in most signifcant bits. Use GetNumBits()
             // and GetNumUint64s() to calculate how much padding. It's a copy of the internal
             // representation, so client can modify the return value if desired.
-            std::vector<uint64_t> GetBits() const;
+            std::unique_ptr<uint64_t[]> GetBits() const;
 
             // Get XOR of this with some other bits.
             std::unique_ptr<Uint64Bits> XOR(const Uint64Bits & otherBits);
@@ -50,9 +51,9 @@ namespace CustomCrypto {
             // the type of the source string (e.g. 'hex')
             std::string _sourceType;
             // the hex representation of these bits
-            std::string _hexRepresentation;
+            char* _hexRepresentation;
             // the base64 representaton of these bits
-            std::string _base64Representation;
+            char* _base64Representation;
             // the number of bits this represents
             int _numBits;
             // the total number of Uint64s used for the internal bit representation.
@@ -61,7 +62,7 @@ namespace CustomCrypto {
             // number of padding bits in the "last" uint64_t
             int _numPaddingBits;
             // the internal representation of the bits
-            std::vector<uint64_t> _bits;
+            uint64_t* _bits;
 
             // sets the internal bits representation from the source string/type
             void _setBitsFromSource();

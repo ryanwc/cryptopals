@@ -2,7 +2,6 @@
 #include <map>
 #include <math.h>
 #include <memory>
-#include <vector>
 
 #include "uint64_bits.h"
 
@@ -14,8 +13,9 @@ namespace CustomCrypto {
         if (sourceType.compare("hex") != 0) {
             throw std::invalid_argument("only known translation is for 'hex' source type");
         }
-        _hexRepresentation = "";
-        _base64Representation = "";
+        _bits = NULL;
+        _hexRepresentation = NULL;
+        _base64Representation = NULL;
         _numBits = 0;
         _numPaddingBits = 0;
         _numUint64s = 0;
@@ -42,6 +42,18 @@ namespace CustomCrypto {
         _sourceType = "bits";*/
     }
 
+    Uint64Bits::~Uint64Bits() {
+        if (_bits) {
+            free(_bits);
+        }
+        if (_base64Representation) {
+            free(_base64Representation);
+        }
+        if (_hexRepresentation) {
+            free(_hexRepresentation);
+        }
+    }
+
     int Uint64Bits::GetNumBits() const {
         return _numBits;
     }
@@ -54,7 +66,7 @@ namespace CustomCrypto {
         if (_sourceType.compare("base64") == 0) {
             return _sourceString;
         }
-        if (_base64Representation.length() > 0) {
+        if (_base64Representation) {
             return _base64Representation;
         } 
 
@@ -72,9 +84,10 @@ namespace CustomCrypto {
         throw std::runtime_error("get hex representation not implemented for non-hex source");
     }
 
-    std::vector<uint64_t> Uint64Bits::GetBits() const {
+    std::unique_ptr<uint64_t[]> Uint64Bits::GetBits() const {
         
-        return _bits;
+        //return _bits;
+        throw std::runtime_error("not implemented");
     }
 
     std::unique_ptr<Uint64Bits> Uint64Bits::XOR(const Uint64Bits & otherBits) {
@@ -110,7 +123,7 @@ namespace CustomCrypto {
 
         _numBits = srcStrLen * 4;
         _numUint64s = int(ceil(_numBits / 64.0));
-        _bits = std::vector<uint64_t>(_numUint64s);
+        _bits = (uint64_t*) malloc(sizeof(uint64_t) * _numUint64s);
 
         int sourceStrPos = srcStrLen - 1;
         int bitArrPos = _numUint64s;
@@ -267,7 +280,8 @@ namespace CustomCrypto {
             }
         }
 
-        _base64Representation = std::string(base64StrLen + 1, '\0');
+        _base64Representation = (char*) malloc(sizeof(char) * (base64StrLen + 1)); // for null terinator
+        _base64Representation[base64StrLen] = '\0';
         int uint64ArrIndex = 0;
         int base64CharIndex = 0;
         int uintBitStartPos = _numPaddingBits;
