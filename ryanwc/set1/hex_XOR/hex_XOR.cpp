@@ -11,7 +11,7 @@ namespace CustomCrypto {
 
 		CustomCrypto::Uint64Bits bitsOne(hexStringOne, "hex");
 		CustomCrypto::Uint64Bits bitsTwo(hexStringTwo, "hex");
-		CustomCrypto::Uint64Bits xorBits = bitsOne.XOR(bitsTwo);
-		return xorBits.GetHexRepresentation();
+		std::unique_ptr<CustomCrypto::Uint64Bits> xorBits = bitsOne.XOR(bitsTwo);
+		return xorBits->GetHexRepresentation();
 	}
 }

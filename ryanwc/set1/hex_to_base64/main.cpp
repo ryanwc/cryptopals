@@ -1,5 +1,5 @@
 #include <iostream>
-//#include <chrono>
+#include <chrono>
 
 #include "hex_to_base64.h"
 
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	/* performance measurement
+	// performance measurement
 	int currExecution = 0;
 	int numExecutions = 10000;
 	auto start = std::chrono::high_resolution_clock::now();
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 	}
 	auto stop = std::chrono::high_resolution_clock::now();
 	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() << std::endl;
-	*/
+	
 
 	return EXIT_SUCCESS;
 }
