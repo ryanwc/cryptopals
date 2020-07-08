@@ -8,7 +8,9 @@
 
 namespace CustomCrypto {
 
-    // Implementation that lazily calculates and memoizes the string representations.
+    // Implementation that:
+    // - uses naked pointers for internal bits and string representations.
+    // - lazily calculates and memoizes the string representations.
     Uint64Bits::Uint64Bits(std::string sourceString, std::string sourceType) {
         if (sourceType.compare("hex") != 0) {
             throw std::invalid_argument("only known translation is for 'hex' source type");
@@ -24,22 +26,16 @@ namespace CustomCrypto {
         _setBitsFromSource();
     }
 
-    Uint64Bits::Uint64Bits(std::unique_ptr<uint64_t> bits, int numBits) {
-        /*
-        int arrSize = int(ceil(numBits / 64));
-        _bits = std::make_unique<uint64_t[]>(arrSize);
-        uint64_t* nakedBitsPtr = bits.get();
-        for (int i = 0; i < arrSize; i++) {
-            _bits[i] = nakedBitsPtr[i];
-        }
+    Uint64Bits::Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits) {
 
-        _hexRepresentation = "";
-        _base64Representation = "";
+        _bits = bits.release();
+        _hexRepresentation = NULL;
+        _base64Representation = NULL;
         _numBits = numBits;
-        _numUint64s = arrSize;
-        _numPaddingBits = 0;
+        _numUint64s = numUint64s;
+        _numPaddingBits = numPaddingBits;
         _sourceString = "";
-        _sourceType = "bits";*/
+        _sourceType = "bits";
     }
 
     Uint64Bits::~Uint64Bits() {
@@ -60,6 +56,10 @@ namespace CustomCrypto {
 
     int Uint64Bits::GetNumUint64s() const {
         return _numUint64s;
+    }
+
+    int Uint64Bits::GetNumPaddingBits() const {
+        return _numPaddingBits;
     }
 
     std::string Uint64Bits::GetBase64Representation() {
@@ -86,25 +86,61 @@ namespace CustomCrypto {
 
     std::unique_ptr<uint64_t[]> Uint64Bits::GetBits() const {
         
-        //return _bits;
-        throw std::runtime_error("not implemented");
+        auto bitsCopy = std::make_unique<uint64_t[]>(_numUint64s);
+        for (int i = 0; i < _numUint64s; i++) {
+            bitsCopy[i] = _bits[i];
+        }
+        return bitsCopy;
     }
 
     std::unique_ptr<Uint64Bits> Uint64Bits::XOR(const Uint64Bits & otherBits) {
-        /*
-        int numMyUint64s = int(ceil(_numBits / 64.0));
-
+        
         int numOtherBits = otherBits.GetNumBits();
-        int numOtherUint64s = int(ceil(numOtherBits / 64.0));
-        std::vector<uint64_t> otherBitsUniquePtr = otherBits.GetBits();
-
-        // could memoize this (and maybe provide public accessor) if needed a lot
-        uint64_t* myRightAlignedBits[numMyUint64s];*/
+        int numOtherUint64s = otherBits.GetNumUint64s();
+        int numOtherPadding = otherBits.GetNumPaddingBits();
+        uint64_t* otherBitsInternal = otherBits.GetBits().release();
 
         // iterate and do xors
-        // make and return new obj
+        bool myArrayLonger = _numUint64s >= numOtherUint64s;
 
-		throw std::runtime_error("im not implemented yet");
+        uint64_t* longerArray;
+        uint64_t* shorterArray;
+        int longerArrSize;
+        int numLongerPadding;
+        int numLongerBits;
+
+        if (myArrayLonger) {
+            longerArray = _bits;
+            shorterArray = otherBitsInternal;
+            longerArrSize = _numUint64s;
+            numLongerPadding = _numPaddingBits;
+            numLongerBits = _numBits;
+        }
+        else {
+            longerArray = otherBitsInternal;
+            shorterArray = _bits;
+            longerArrSize = numOtherUint64s;
+            numLongerPadding = numOtherPadding;
+            numLongerBits = numOtherBits;
+        }
+
+        auto xorBits = std::make_unique<uint64_t[]>(longerArrSize);
+
+        int arraySizeDiff = abs(_numUint64s - numOtherUint64s);
+        int longerArrIndex;
+        for (longerArrIndex = 0; longerArrIndex < arraySizeDiff; longerArrIndex++) {
+            xorBits[longerArrIndex] = longerArray[longerArrIndex];
+        }
+
+        for ( ; longerArrIndex < longerArrSize; longerArrIndex++) {
+            xorBits[longerArrIndex] = longerArray[longerArrIndex] ^ shorterArray[longerArrIndex - arraySizeDiff];
+        }
+
+        // done with this
+        free(otherBitsInternal);
+
+        // make and return new obj
+        return std::make_unique<Uint64Bits>(std::move(xorBits), numLongerBits, longerArrSize, numLongerPadding);
     }
 
     void Uint64Bits::_setBitsFromSource() {

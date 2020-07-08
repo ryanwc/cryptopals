@@ -16,11 +16,14 @@ namespace CustomCrypto {
         public:
 
             Uint64Bits(std::string sourceString, std::string sourceType);
-            Uint64Bits(std::unique_ptr<uint64_t> bits, int numBits);
+            Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits);
             ~Uint64Bits();
 
 			// Get the total number of bits this Uint64Bits represents
             int GetNumBits() const;
+
+            // number of padding bits in the "last" uint64_t
+            int GetNumPaddingBits() const;
 
             // Get the total number of Uint64s used for the internal bit representation.
             // Could be more than strictly needed to facilitate, e.g., base64 operations.
