@@ -12,30 +12,24 @@ namespace CustomCrypto {
     // - uses naked pointers for internal bits and string representations.
     // - lazily calculates and memoizes the string representations.
     Uint64Bits::Uint64Bits(std::string sourceString, std::string sourceType) {
-        if (sourceType.compare("hex") != 0) {
-            throw std::invalid_argument("only known translation is for 'hex' source type");
-        }
         _bits = NULL;
         _hexRepresentation = NULL;
         _base64Representation = NULL;
+        _bitRepresentation = NULL;
         _numBits = 0;
-        _numPaddingBits = 0;
         _numUint64s = 0;
-        _sourceString = sourceString;
-        _sourceType = sourceType;
-        _setBitsFromSource();
+        _numPaddingBits = 0;
+        _initInternalsFromSource(sourceString, sourceType);
     }
 
     Uint64Bits::Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits) {
-
         _bits = bits.release();
         _hexRepresentation = NULL;
         _base64Representation = NULL;
+        _bitRepresentation = NULL;
         _numBits = numBits;
         _numUint64s = numUint64s;
         _numPaddingBits = numPaddingBits;
-        _sourceString = "";
-        _sourceType = "bits";
     }
 
     Uint64Bits::~Uint64Bits() {
@@ -47,6 +41,9 @@ namespace CustomCrypto {
         }
         if (_hexRepresentation) {
             free(_hexRepresentation);
+        }
+        if (_bitRepresentation) {
+            free(_bitRepresentation);
         }
     }
 
@@ -63,9 +60,6 @@ namespace CustomCrypto {
     }
 
     std::string Uint64Bits::GetBase64Representation() {
-        if (_sourceType.compare("base64") == 0) {
-            return _sourceString;
-        }
         if (_base64Representation) {
             return _base64Representation;
         } 
@@ -75,13 +69,21 @@ namespace CustomCrypto {
     }
 
     std::string Uint64Bits::GetHexRepresentation() {
-        if (_sourceType.compare("hex") == 0) {
-            return _sourceString;
+        if (_hexRepresentation) {
+            return _hexRepresentation;
         }
-        //if (_hexRepresentation) {
-        //    return _hexRepresentation;
-        //}
-        throw std::runtime_error("get hex representation not implemented for non-hex source");
+
+        _setHexStrFromBits();
+        return _hexRepresentation;
+    }
+
+    std::string Uint64Bits::GetBitRepresentation() {
+        if (_bitRepresentation) {
+            return _bitRepresentation;
+        }
+
+        _setBitStrFromBits();
+        return _bitRepresentation;
     }
 
     std::unique_ptr<uint64_t[]> Uint64Bits::GetBits() const {
@@ -143,18 +145,19 @@ namespace CustomCrypto {
         return std::make_unique<Uint64Bits>(std::move(xorBits), numLongerBits, longerArrSize, numLongerPadding);
     }
 
-    void Uint64Bits::_setBitsFromSource() {
-        if (_sourceType.compare("hex") == 0) {
-            _setBitsFromHex();
+    void Uint64Bits::_initInternalsFromSource(std::string sourceString, std::string sourceType) {
+        if (sourceType.compare("hex") == 0) {
+            _setInternalsFromHex(sourceString);
         }
+		throw std::invalid_argument("only source type supported: 'hex'");
     }
 
-    inline void Uint64Bits::_setBitsFromHex() {
+    inline void Uint64Bits::_setInternalsFromHex(std::string hexString) {
         // breaks if src string is len 0
-        int srcStrLen = _sourceString.length();
+        int srcStrLen = hexString.length();
 
 		if (srcStrLen % 2 != 0) {
-			throw std::invalid_argument("purported hex string is not even length: " + _sourceString);
+			throw std::invalid_argument("purported hex string is not even length: " + hexString);
 		}
 
         _numBits = srcStrLen * 4;
@@ -171,7 +174,7 @@ namespace CustomCrypto {
                 _bits[bitArrPos] = 0b0;
                 bitsAssignedThis64 = 0;
             }
-            switch (_sourceString[sourceStrPos]) {
+            switch (hexString[sourceStrPos]) {
                 case '0':
                     nextVal = 0b0000;
                     break;
@@ -228,7 +231,7 @@ namespace CustomCrypto {
                     break;
                 default:
                     std::string errMessage = "given hex string has invalid hexadecimal char: ";
-                    errMessage.push_back(_sourceString[sourceStrPos]);
+                    errMessage.push_back(hexString[sourceStrPos]);
                     throw std::invalid_argument(errMessage);
             }
             _bits[bitArrPos] |= nextVal << bitsAssignedThis64;
@@ -354,7 +357,15 @@ namespace CustomCrypto {
         throw std::runtime_error("not implemented");
     }
 
-    void Uint64Bits::_setBitsFromBase64() {
+    void Uint64Bits::_setBitStrFromBits() {
+        throw std::runtime_error("not implemented");
+    }
+
+    void Uint64Bits::_setInternalsFromBase64(std::string sourceString) {
+        throw std::runtime_error("not implemented");
+    }
+
+    void Uint64Bits::_setInternalsFromBits(std::string sourceString) {
         throw std::runtime_error("not implemented");
     }
 }
