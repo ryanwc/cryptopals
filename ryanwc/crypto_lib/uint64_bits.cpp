@@ -354,7 +354,94 @@ namespace CustomCrypto {
     }
 
     void Uint64Bits::_setHexStrFromBits() {
-        throw std::runtime_error("not implemented");
+
+        int hexStrLen = _numBits / 4;
+        int overflow = _numBits % 4;
+        int numFrontZeroes = 4 - overflow;
+
+        _hexRepresentation = (char*) malloc(sizeof(char) * (hexStrLen + 1)); // for null terinator
+        _hexRepresentation[hexStrLen] = '\0';
+
+        int bitPos = _numPaddingBits - numFrontZeroes;
+        int bitArrPos = 0;
+        int hexStrPos = 0;
+        uint8_t fourBits;
+        uint8_t intermediate;
+        uint64_t currBitsChunk = _bits[0];
+        while (hexStrPos < hexStrLen - 1) {
+            // isolate the 4 bits we care about in the 4 least sig bits of these 8
+            if (bitPos <= 56) {
+                // bitshift undefined for negative operands
+                fourBits = currBitsChunk >> (56 - bitPos);
+                fourBits >>= 4;  // if this doesnt work need the 'intermediate' trick
+            }
+            else {
+                // we know this is the least 4 bits in the 64
+                fourBits = currBitsChunk;
+                intermediate = fourBits << 4;
+                fourBits = intermediate >> 4;
+            }
+
+            switch (_bits[bitArrPos]) {
+                case 0b0000:
+                    _hexRepresentation[hexStrPos] = '0';
+                    break;
+                case 0b0001:
+                    _hexRepresentation[hexStrPos] = '1';
+                    break;
+                case 0b0010:
+                    _hexRepresentation[hexStrPos] = '2';
+                    break;
+                case 0b0011:
+                    _hexRepresentation[hexStrPos] = '3';
+                    break;
+                case 0b0100:
+                    _hexRepresentation[hexStrPos] = '4';
+                    break;
+                case 0b0101:
+                    _hexRepresentation[hexStrPos] = '5';
+                    break;
+                case 0b0110:
+                    _hexRepresentation[hexStrPos] = '6';
+                    break;
+                case 0b0111:
+                    _hexRepresentation[hexStrPos] = '7';
+                    break;
+                case 0b1000:
+                    _hexRepresentation[hexStrPos] = '8';
+                    break;
+                case 0b1001:
+                    _hexRepresentation[hexStrPos] = '9';
+                    break;
+                case 0b1010:
+                    _hexRepresentation[hexStrPos] = 'A';
+                    break;
+                case 0b1011:
+                    _hexRepresentation[hexStrPos] = 'B';
+                    break;
+                case 0b1100:
+                    _hexRepresentation[hexStrPos] = 'C';
+                    break;
+                case 0b1101:
+                    _hexRepresentation[hexStrPos] = 'D';
+                    break;
+                case 0b1110:
+                    _hexRepresentation[hexStrPos] = 'E';
+                    break;
+                case 0b1111:
+                    _hexRepresentation[hexStrPos] = 'F';
+                    break;
+                default:
+                    throw std::invalid_argument("hex translation missed a 4-bit permuation");
+            }
+            bitPos += 4;
+            hexStrPos += 1;
+            if (bitPos > 63) {
+                bitPos = 0;
+                bitArrPos += 1;
+                currBitsChunk = _bits[bitArrPos];
+            }
+        }
     }
 
     void Uint64Bits::_setBitStrFromBits() {
