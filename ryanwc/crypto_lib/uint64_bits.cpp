@@ -149,7 +149,9 @@ namespace CustomCrypto {
         if (sourceType.compare("hex") == 0) {
             _setInternalsFromHex(sourceString);
         }
-		throw std::invalid_argument("only source type supported: 'hex'");
+        else {
+		    throw std::invalid_argument("source types supported: ['hex']");
+        }
     }
 
     inline void Uint64Bits::_setInternalsFromHex(std::string hexString) {
