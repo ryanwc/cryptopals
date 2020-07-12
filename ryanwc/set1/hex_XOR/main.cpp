@@ -1,4 +1,5 @@
 #include <iostream>
+//#include <chrono>
 
 #include "hex_XOR.h"
 
@@ -28,7 +29,7 @@ int main(int argc, char** argv) {
 	int numExecutions = 10000;
 	auto start = std::chrono::high_resolution_clock::now();
 	while (currExecution < numExecutions) {
-		convertHexStringToBase64("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d");
+		CustomCrypto::XORhexStrings("1c0111001f010100061a024b53535009181c", "686974207468652062756c6c277320657965");
 		currExecution += 1;
 	}
 	auto stop = std::chrono::high_resolution_clock::now();
