@@ -11,7 +11,7 @@ namespace CustomCrypto {
     // Implementation that:
     // - uses naked pointers for internal bits and string representations.
     // - lazily calculates and memoizes the string representations.
-    Uint64Bits::Uint64Bits(std::string sourceString, std::string sourceType) {
+    Uint64Bits::Uint64Bits(std::string sourceString, std::string sourceType, bool preserveLeadingZeroes) {
         if (sourceString.length() < 1) {
             throw std::invalid_argument("sourceString cannot be empty");
         }
@@ -22,10 +22,11 @@ namespace CustomCrypto {
         _numBits = 0;
         _numUint64s = 0;
         _numPaddingBits = 0;
+        _preserveLeadingZeroes = preserveLeadingZeroes;
         _initInternalsFromSource(sourceString, sourceType);
     }
 
-    Uint64Bits::Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits) {
+    Uint64Bits::Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits, bool preserveLeadingZeroes) {
         _bits = bits.release();
         _hexRepresentation = NULL;
         _base64Representation = NULL;
@@ -33,6 +34,7 @@ namespace CustomCrypto {
         _numBits = numBits;
         _numUint64s = numUint64s;
         _numPaddingBits = numPaddingBits;
+        _preserveLeadingZeroes = preserveLeadingZeroes;
     }
 
     Uint64Bits::~Uint64Bits() {
@@ -60,6 +62,10 @@ namespace CustomCrypto {
 
     int Uint64Bits::GetNumPaddingBits() const {
         return _numPaddingBits;
+    }
+
+    bool Uint64Bits::GetAnyLeadingZeroesWerePreserved() const {
+        return _preserveLeadingZeroes;
     }
 
     std::string Uint64Bits::GetBase64Representation() {
@@ -98,7 +104,7 @@ namespace CustomCrypto {
         return bitsCopy;
     }
 
-    std::unique_ptr<Uint64Bits> Uint64Bits::XOR(const Uint64Bits & otherBits) {
+    std::unique_ptr<Uint64Bits> Uint64Bits::XOR(const Uint64Bits & otherBits, bool preserveLeadingZeroes) {
         
         int numOtherBits = otherBits.GetNumBits();
         int numOtherUint64s = otherBits.GetNumUint64s();
@@ -202,16 +208,19 @@ namespace CustomCrypto {
 
         int srcStrLen = hexString.length();
 
-        int numLeadingZeros = 0;
+        int numLeadingZeroes = 0;
         int zeroesTestPos = 0;
+
         // does not count final zero in e.g. "0000" as a leading zero
-        while (hexString[zeroesTestPos] == '0' && zeroesTestPos < srcStrLen - 1) {
-            numLeadingZeros += 1;
-            zeroesTestPos += 1;
+        if (!_preserveLeadingZeroes) {
+            while (hexString[zeroesTestPos] == '0' && zeroesTestPos < srcStrLen - 1) {
+                numLeadingZeroes += 1;
+                zeroesTestPos += 1;
+            }
         }
 
-        int numNonLeadingZeroChars = (srcStrLen - numLeadingZeros) * 4;
-        _numUint64s = int(ceil(numNonLeadingZeroChars / 64.0));
+        int numNonLeadingZeroBits = (srcStrLen - numLeadingZeroes) * 4;
+        _numUint64s = int(ceil(numNonLeadingZeroBits / 64.0));
         _bits = (uint64_t*) malloc(sizeof(uint64_t) * _numUint64s);
 
         int sourceStrPos = srcStrLen - 1;
@@ -306,10 +315,10 @@ namespace CustomCrypto {
             bitsAssignedThis64 += 4;
             _numBits += 4;
         } 
-        while (sourceStrPos >= 0);
+        while (sourceStrPos - numLeadingZeroes >= 0);
 
-        _numBits -= nextPadding;
-        _numPaddingBits = 64 - bitsAssignedThis64 + nextPadding;
+        _numBits -= _preserveLeadingZeroes ? 0 : nextPadding;
+        _numPaddingBits = 64 - bitsAssignedThis64 + (_preserveLeadingZeroes ? 0 : nextPadding);
     }
 
     // Set the base64CharArray[base64Index] according to bitArray[bitArrayStartPos:bitArrayStartPos+6]
@@ -391,6 +400,10 @@ namespace CustomCrypto {
         */
         int octetOverflow = _numBits % 8;
         int octetNumBits = octetOverflow == 0 ? _numBits : _numBits + (8 - octetOverflow);
+        // handle edge case of 0 bits (i.e., these bits represent "no data" and leading zeroes not preserved)
+        if (_numBits == 0) {
+            octetNumBits = 8;
+        }
         int base64StrLen = octetNumBits / 6;
         int numPaddingZeroes = 0;
         int overflow = octetNumBits % 6;

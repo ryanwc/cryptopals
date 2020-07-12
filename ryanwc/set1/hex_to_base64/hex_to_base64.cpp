@@ -8,9 +8,9 @@
 
 namespace CustomCrypto {
 
-	std::string ConvertHexStringToBase64(std::string hexString) {
+	std::string ConvertHexStringToBase64(std::string hexString, bool preserveLeadingZeroes) {
 
-		CustomCrypto::Uint64Bits theBits(hexString, "hex");
+		CustomCrypto::Uint64Bits theBits(hexString, "hex", preserveLeadingZeroes);
 		return theBits.GetBase64Representation();
 	}
 }

@@ -15,8 +15,8 @@ namespace CustomCrypto {
 
         public:
 
-            Uint64Bits(std::string sourceString, std::string sourceType);
-            Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits);
+            Uint64Bits(std::string sourceString, std::string sourceType, bool preserveLeadingZeros = false);
+            Uint64Bits(std::unique_ptr<uint64_t[]> bits, int numBits, int numUint64s, int numPaddingBits, bool preserveLeadingZeros = false);
             ~Uint64Bits();
 
 			// Get the total number of bits this Uint64Bits represents
@@ -28,6 +28,9 @@ namespace CustomCrypto {
             // Get the total number of Uint64s used for the internal bit representation.
             // Could be more than strictly needed to facilitate, e.g., base64 operations.
             int GetNumUint64s() const;
+
+            // get whether leading zeroes (if any) were preserved when constructing these bits.
+            bool GetAnyLeadingZeroesWerePreserved() const;
 
 			// Get a base64 string representation of the bits
             std::string GetBase64Representation();
@@ -45,10 +48,15 @@ namespace CustomCrypto {
             std::unique_ptr<uint64_t[]> GetBits() const;
 
             // Get XOR of this with some other bits.
-            std::unique_ptr<Uint64Bits> XOR(const Uint64Bits & otherBits);
+            std::unique_ptr<Uint64Bits> XOR(const Uint64Bits & otherBits, bool preserveLeadingZeroes = false);
 
         private:
 
+            // whether we preserved the leading zeroes when this was initially created
+            // e.g. if this was true, bits constructed from hex string "0001" would be represented like
+            // 0b0000 0000 0000 0001, but if false, then represented like
+            // 0b1
+            bool _preserveLeadingZeroes;
             // the hex representation of these bits
             char* _hexRepresentation;
             // the base64 representaton of these bits

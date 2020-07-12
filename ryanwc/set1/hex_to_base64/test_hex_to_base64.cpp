@@ -10,14 +10,15 @@ namespace {
     TEST(ConvertHexStringToBase64_Test, ShortString_succeeds) {
         ASSERT_STREQ(std::string("AA==").c_str(), CustomCrypto::ConvertHexStringToBase64("0").c_str());
         ASSERT_STREQ(std::string("AA==").c_str(), CustomCrypto::ConvertHexStringToBase64("00000000").c_str());
+        ASSERT_STREQ(std::string("AAAAAA==").c_str(), CustomCrypto::ConvertHexStringToBase64("00000000", true).c_str());
         ASSERT_STREQ(std::string("AQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("1").c_str());
         ASSERT_STREQ(std::string("AQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("01").c_str());
         ASSERT_STREQ(std::string("AQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("00001").c_str());
+        ASSERT_STREQ(std::string("AAAB").c_str(), CustomCrypto::ConvertHexStringToBase64("00001", true).c_str());
         ASSERT_STREQ(std::string("TQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("4D").c_str());
         ASSERT_STREQ(std::string("lj0=").c_str(), CustomCrypto::ConvertHexStringToBase64("963d").c_str());
         ASSERT_STREQ(std::string("IrQ=").c_str(), CustomCrypto::ConvertHexStringToBase64("22b4").c_str());
         ASSERT_STREQ(std::string("p+NV").c_str(), CustomCrypto::ConvertHexStringToBase64("a7e355").c_str());
-        ASSERT_STREQ(std::string("SKvW").c_str(), CustomCrypto::ConvertHexStringToBase64("48abd6").c_str());
     }
 
     TEST(ConvertHexStringToBase64_Test, HandlesMixedCaps_succeeds) {
