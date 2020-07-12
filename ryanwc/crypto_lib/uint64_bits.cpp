@@ -12,6 +12,9 @@ namespace CustomCrypto {
     // - uses naked pointers for internal bits and string representations.
     // - lazily calculates and memoizes the string representations.
     Uint64Bits::Uint64Bits(std::string sourceString, std::string sourceType) {
+        if (sourceString.length() < 1) {
+            throw std::invalid_argument("sourceString cannot be empty");
+        }
         _bits = NULL;
         _hexRepresentation = NULL;
         _base64Representation = NULL;
@@ -100,7 +103,7 @@ namespace CustomCrypto {
         int numOtherBits = otherBits.GetNumBits();
         int numOtherUint64s = otherBits.GetNumUint64s();
         int numOtherPadding = otherBits.GetNumPaddingBits();
-        uint64_t* otherBitsInternal = otherBits.GetBits().release();
+        uint64_t* otherBitsInternal = otherBits.GetBits().release();  // want same type as this _bits
 
         // iterate and do xors
         bool myArrayLonger = _numUint64s >= numOtherUint64s;
@@ -130,6 +133,7 @@ namespace CustomCrypto {
 
         int arraySizeDiff = abs(_numUint64s - numOtherUint64s);
         int longerArrIndex;
+
         for (longerArrIndex = 0; longerArrIndex < arraySizeDiff; longerArrIndex++) {
             xorBits[longerArrIndex] = longerArray[longerArrIndex];
         }
@@ -138,11 +142,51 @@ namespace CustomCrypto {
             xorBits[longerArrIndex] = longerArray[longerArrIndex] ^ shorterArray[longerArrIndex - arraySizeDiff];
         }
 
-        // done with this
         free(otherBitsInternal);
 
-        // make and return new obj
-        return std::make_unique<Uint64Bits>(std::move(xorBits), numLongerBits, longerArrSize, numLongerPadding);
+        // TODO: what will happen to _set*FromBits() funcs if have less bits than a single char?
+        // e.g. 2 _numBits when to hex, 5 _numBits when to base64?
+        // and what happens for those if 0 bits? (e.g. XOR equivalent bits)
+
+        int numSetBits = numLongerBits;
+        int newArrSize = longerArrSize;
+        int newPadding = numLongerPadding;
+        if (_numBits == numOtherBits) {
+            // we could be reporting too many bits in the new bits, since the most sig X bits could have been xor'd to 0.
+            // so figure out what the first set bit is, and fix numSet/padding/array size as necessary.
+            // probably several ways to do this. e.g. 63 cases, or "test against 0, 1, and *2 until less than". 
+            // we'll do bit shifting right.
+            int testBitPos = numLongerPadding;
+            int testArrPos = 0;
+            while (numSetBits > 0) {
+                if (testBitPos > 63) {
+                    testBitPos = 0;
+                    newPadding = 0;
+                    newArrSize -= 1;
+                    testArrPos += 1;
+                }
+                // test if that bit is set
+                if (xorBits[testArrPos] >> (63 - testBitPos) != 0) {
+                    break;
+                }
+                numSetBits -= 1;
+                newPadding += 1;
+            }
+
+            // in edge case of all zero (i.e., all bits xor'd to 0), everything should be OK
+            // arr size should already be 1, and numSetBits is 0 and newPadding is 64
+
+            int sizeDiff = longerArrSize - newArrSize;
+            if (sizeDiff > 0) {
+                // there were enough sig bits the same between the two that now we can use less uint64s
+                auto shorterNewBits = std::make_unique<uint64_t[]>(newArrSize);
+                for (int i = 0; i < newArrSize; i ++) {
+                    shorterNewBits[i] = xorBits[i + sizeDiff];
+                }
+                return std::make_unique<Uint64Bits>(std::move(shorterNewBits), numSetBits, newArrSize, newPadding);
+            }
+        }
+        return std::make_unique<Uint64Bits>(std::move(xorBits), numSetBits, newArrSize, newPadding);
     }
 
     void Uint64Bits::_initInternalsFromSource(std::string sourceString, std::string sourceType) {
@@ -155,20 +199,25 @@ namespace CustomCrypto {
     }
 
     inline void Uint64Bits::_setInternalsFromHex(std::string hexString) {
-        // breaks if src string is len 0
+
         int srcStrLen = hexString.length();
 
-		if (srcStrLen % 2 != 0) {
-			throw std::invalid_argument("purported hex string is not even length: " + hexString);
-		}
+        int numLeadingZeros = 0;
+        int zeroesTestPos = 0;
+        // does not count final zero in e.g. "0000" as a leading zero
+        while (hexString[zeroesTestPos] == '0' && zeroesTestPos < srcStrLen - 1) {
+            numLeadingZeros += 1;
+            zeroesTestPos += 1;
+        }
 
-        _numBits = srcStrLen * 4;
-        _numUint64s = int(ceil(_numBits / 64.0));
+        int numNonLeadingZeroChars = (srcStrLen - numLeadingZeros) * 4;
+        _numUint64s = int(ceil(numNonLeadingZeroChars / 64.0));
         _bits = (uint64_t*) malloc(sizeof(uint64_t) * _numUint64s);
 
         int sourceStrPos = srcStrLen - 1;
         int bitArrPos = _numUint64s;
         int bitsAssignedThis64 = 64;
+        int nextPadding;
         uint64_t nextVal;
         do {
             if (bitsAssignedThis64 >= 64) {
@@ -179,57 +228,73 @@ namespace CustomCrypto {
             switch (hexString[sourceStrPos]) {
                 case '0':
                     nextVal = 0b0000;
+                    nextPadding = 4;
                     break;
                 case '1':
                     nextVal = 0b0001;
+                    nextPadding = 3;
                     break;
                 case '2':
                     nextVal = 0b0010;
+                    nextPadding = 2;
                     break;
                 case '3':
                     nextVal = 0b0011;
+                    nextPadding = 2;
                     break;
                 case '4':
                     nextVal = 0b0100;
+                    nextPadding = 1;
                     break;
                 case '5':
                     nextVal = 0b0101;
+                    nextPadding = 1;
                     break;
                 case '6':
                     nextVal = 0b0110;
+                    nextPadding = 1;
                     break;
                 case '7':
                     nextVal = 0b0111;
+                    nextPadding = 1;
                     break;
                 case '8':
                     nextVal = 0b1000;
+                    nextPadding = 0;
                     break;
                 case '9':
                     nextVal = 0b1001;
+                    nextPadding = 0;
                     break;
                 case 'A':
                 case 'a':
                     nextVal = 0b1010;
+                    nextPadding = 0;
                     break;
                 case 'B':
                 case 'b':
                     nextVal = 0b1011;
+                    nextPadding = 0;
                     break;
                 case 'C':
                 case 'c':
                     nextVal = 0b1100;
+                    nextPadding = 0;
                     break;
                 case 'D':
                 case 'd':
                     nextVal = 0b1101;
+                    nextPadding = 0;
                     break;
                 case 'E':
                 case 'e':
                     nextVal = 0b1110;
+                    nextPadding = 0;
                     break;
                 case 'F':
                 case 'f':
                     nextVal = 0b1111;
+                    nextPadding = 0;
                     break;
                 default:
                     std::string errMessage = "given hex string has invalid hexadecimal char: ";
@@ -239,10 +304,12 @@ namespace CustomCrypto {
             _bits[bitArrPos] |= nextVal << bitsAssignedThis64;
             sourceStrPos -= 1;
             bitsAssignedThis64 += 4;
+            _numBits += 4;
         } 
         while (sourceStrPos >= 0);
 
-        _numPaddingBits = bitsAssignedThis64 > 0 ? (64 - bitsAssignedThis64) : 0;
+        _numBits -= nextPadding;
+        _numPaddingBits = 64 - bitsAssignedThis64 + nextPadding;
     }
 
     // Set the base64CharArray[base64Index] according to bitArray[bitArrayStartPos:bitArrayStartPos+6]
@@ -310,9 +377,23 @@ namespace CustomCrypto {
 
     void Uint64Bits::_setBase64StrFromBits() {
 
-        int base64StrLen = _numBits / 6;
+        /*
+        https://docs.oracle.com/cd/E18150_01/javadocs/DevelopmentKit/com/stc/connector/framework/util/Base64.html
+        The Base64 Content-Transfer-Encoding is designed to represent arbitrary sequences of octets in a form 
+        that need not be humanly readable. The encoding and decoding algorithms are simple, but the encoded data 
+        are consistently only about 33 percent larger than the unencoded data. This encoding is virtually identical 
+        to the one used in Privacy Enhanced Mail (PEM) applications, as defined in RFC 1421.
+
+        So, it makes no sense to say for example "translate 0b1 to base64".
+        A better command is "translate 0b00000001 to base64".
+        Since we're allowing non-even hex strings, that also means we could have a non-multiple-of-8 _numBits.
+        So let's take care of that.
+        */
+        int octetOverflow = _numBits % 8;
+        int octetNumBits = octetOverflow == 0 ? _numBits : _numBits + (8 - octetOverflow);
+        int base64StrLen = octetNumBits / 6;
         int numPaddingZeroes = 0;
-        int overflow = _numBits % 6;
+        int overflow = octetNumBits % 6;
         if (overflow != 0) {
             numPaddingZeroes = 6 - overflow;
             base64StrLen += 1;
@@ -325,9 +406,9 @@ namespace CustomCrypto {
         _base64Representation[base64StrLen] = '\0';
         int uint64ArrIndex = 0;
         int base64CharIndex = 0;
-        int uintBitStartPos = _numPaddingBits;
+        int uintBitStartPos = _numPaddingBits - (octetNumBits - _numBits);
         int numBitsConverted = 0;
-        int bitsToConvert = numPaddingZeroes > 0 ? _numBits - (6 - numPaddingZeroes) : _numBits;
+        int bitsToConvert = numPaddingZeroes > 0 ? octetNumBits - (6 - numPaddingZeroes) : octetNumBits;
         while (numBitsConverted < bitsToConvert) {
             _setBase64CharFromBits(uint64ArrIndex, uintBitStartPos, base64CharIndex);
             numBitsConverted += 6;
@@ -357,7 +438,7 @@ namespace CustomCrypto {
 
     void Uint64Bits::_setHexStrFromBits() {
 
-        int hexStrLen = _numBits / 4;
+        int hexStrLen = _numBits < 4 ? 1 : _numBits / 4;
         int overflow = _numBits % 4;
         int numFrontZeroes = 4 - overflow;
 

@@ -8,6 +8,11 @@
 namespace {
 
     TEST(ConvertHexStringToBase64_Test, ShortString_succeeds) {
+        ASSERT_STREQ(std::string("AA==").c_str(), CustomCrypto::ConvertHexStringToBase64("0").c_str());
+        ASSERT_STREQ(std::string("AA==").c_str(), CustomCrypto::ConvertHexStringToBase64("00000000").c_str());
+        ASSERT_STREQ(std::string("AQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("1").c_str());
+        ASSERT_STREQ(std::string("AQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("01").c_str());
+        ASSERT_STREQ(std::string("AQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("00001").c_str());
         ASSERT_STREQ(std::string("TQ==").c_str(), CustomCrypto::ConvertHexStringToBase64("4D").c_str());
         ASSERT_STREQ(std::string("lj0=").c_str(), CustomCrypto::ConvertHexStringToBase64("963d").c_str());
         ASSERT_STREQ(std::string("IrQ=").c_str(), CustomCrypto::ConvertHexStringToBase64("22b4").c_str());
@@ -50,12 +55,6 @@ namespace {
         ASSERT_THROW(CustomCrypto::ConvertHexStringToBase64("4Z"), std::invalid_argument);
         ASSERT_THROW(CustomCrypto::ConvertHexStringToBase64("4&"), std::invalid_argument);
         ASSERT_THROW(CustomCrypto::ConvertHexStringToBase64("e30585ca0266461a2f*1b1b577e17cd75130af60fc3cb99266"), std::invalid_argument);
-    }
-
-    TEST(ConvertHexStringToBase64_Test, InvalidHexLength_throws) {
-        ASSERT_THROW(CustomCrypto::ConvertHexStringToBase64("4"), std::invalid_argument);
-        ASSERT_THROW(CustomCrypto::ConvertHexStringToBase64("4D0"), std::invalid_argument);
-        ASSERT_THROW(CustomCrypto::ConvertHexStringToBase64("e30585ca0266461a2fb1b1b577e17cd75130af60fc3cb992660"), std::invalid_argument);
     }
 
 }  // namespace
