@@ -112,7 +112,7 @@ namespace CustomCrypto {
         uint64_t* otherBitsInternal = otherBits.GetBits().release();  // want same type as this _bits
 
         // iterate and do xors
-        bool myArrayLonger = _numUint64s >= numOtherUint64s;
+        bool myBitsLonger = _numBits >= numOtherBits;
 
         uint64_t* longerArray;
         uint64_t* shorterArray;
@@ -120,7 +120,7 @@ namespace CustomCrypto {
         int numLongerPadding;
         int numLongerBits;
 
-        if (myArrayLonger) {
+        if (myBitsLonger) {
             longerArray = _bits;
             shorterArray = otherBitsInternal;
             longerArrSize = _numUint64s;
@@ -150,16 +150,13 @@ namespace CustomCrypto {
 
         free(otherBitsInternal);
 
-        // TODO: what will happen to _set*FromBits() funcs if have less bits than a single char?
-        // e.g. 2 _numBits when to hex, 5 _numBits when to base64?
-        // and what happens for those if 0 bits? (e.g. XOR equivalent bits)
+        // TODO: preserve bits or not.
 
         int numSetBits = numLongerBits;
         int newArrSize = longerArrSize;
         int newPadding = numLongerPadding;
-        if (_numBits == numOtherBits) {
-            // we could be reporting too many bits in the new bits, since the most sig X bits could have been xor'd to 0.
-            // so figure out what the first set bit is, and fix numSet/padding/array size as necessary.
+        if (!_preserveLeadingZeroes) {
+            // figure out what the first set bit is, and fix numSet/padding/array size as necessary.
             // probably several ways to do this. e.g. 63 cases, or "test against 0, 1, and *2 until less than". 
             // we'll do bit shifting right.
             int testBitPos = numLongerPadding;
@@ -451,9 +448,14 @@ namespace CustomCrypto {
 
     void Uint64Bits::_setHexStrFromBits() {
 
-        int hexStrLen = _numBits < 4 ? 1 : _numBits / 4;
+        int hexStrLen = _numBits < 4 ? 1 : int(ceil(_numBits / 4.0));
         int overflow = _numBits % 4;
-        int numFrontZeroes = 4 - overflow;
+        int numFrontZeroes = overflow == 0 ? 0 : 4 - overflow;
+        // handle edge case
+        if (_numBits == 0) {
+            numFrontZeroes = 4;
+        }
+
 
         _hexRepresentation = (char*) malloc(sizeof(char) * (hexStrLen + 1)); // for null terinator
         _hexRepresentation[hexStrLen] = '\0';
@@ -464,7 +466,7 @@ namespace CustomCrypto {
         uint8_t fourBits;
         uint8_t intermediate;
         uint64_t currBitsChunk = _bits[0];
-        while (hexStrPos < hexStrLen - 1) {
+        while (hexStrPos < hexStrLen) {
             // isolate the 4 bits we care about in the 4 least sig bits of these 8
             if (bitPos <= 56) {
                 // bitshift undefined for negative operands
@@ -478,7 +480,7 @@ namespace CustomCrypto {
                 fourBits = intermediate >> 4;
             }
 
-            switch (_bits[bitArrPos]) {
+            switch (fourBits) {
                 case 0b0000:
                     _hexRepresentation[hexStrPos] = '0';
                     break;

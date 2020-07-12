@@ -50,6 +50,9 @@ namespace CustomCrypto {
             // Get XOR of this with some other bits.
             std::unique_ptr<Uint64Bits> XOR(const Uint64Bits & otherBits, bool preserveLeadingZeroes = false);
 
+            // TODO
+            // Comparator(otherBits, bool takeIntoAccountLeadingZeroes);
+
         private:
 
             // whether we preserved the leading zeroes when this was initially created

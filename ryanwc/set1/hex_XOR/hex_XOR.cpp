@@ -7,11 +7,11 @@
 
 namespace CustomCrypto {
 
-	std::string XORhexStrings(std::string hexStringOne, std::string hexStringTwo) {
+	std::string XORhexStrings(std::string hexStringOne, std::string hexStringTwo, bool preserveLeadingZeroes) {
 
-		CustomCrypto::Uint64Bits bitsOne(hexStringOne, "hex");
-		CustomCrypto::Uint64Bits bitsTwo(hexStringTwo, "hex");
-		std::unique_ptr<CustomCrypto::Uint64Bits> xorBits = bitsOne.XOR(bitsTwo);
+		CustomCrypto::Uint64Bits bitsOne(hexStringOne, "hex", preserveLeadingZeroes);
+		CustomCrypto::Uint64Bits bitsTwo(hexStringTwo, "hex", preserveLeadingZeroes);
+		std::unique_ptr<CustomCrypto::Uint64Bits> xorBits = bitsOne.XOR(bitsTwo, preserveLeadingZeroes);
 		return xorBits->GetHexRepresentation();
 	}
 }
