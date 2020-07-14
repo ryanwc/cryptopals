@@ -162,6 +162,19 @@ test_hex_XOR/fast:
 	$(MAKE) -f set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build.make set1/hex_XOR/CMakeFiles/test_hex_XOR.dir/build
 .PHONY : test_hex_XOR/fast
 
+#=============================================================================
+# Target rules for targets named test_crypto_lib
+
+# Build rule for target.
+test_crypto_lib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_crypto_lib
+.PHONY : test_crypto_lib
+
+# fast build rule for target.
+test_crypto_lib/fast:
+	$(MAKE) -f crypto_lib/CMakeFiles/test_crypto_lib.dir/build.make crypto_lib/CMakeFiles/test_crypto_lib.dir/build
+.PHONY : test_crypto_lib/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -174,6 +187,7 @@ help:
 	@echo "... test_hex_to_base64"
 	@echo "... hex_XOR"
 	@echo "... test_hex_XOR"
+	@echo "... test_crypto_lib"
 .PHONY : help
 
 
