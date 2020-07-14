@@ -543,7 +543,31 @@ namespace CustomCrypto {
     }
 
     void Uint64Bits::_setBitStrFromBits() {
-        throw std::runtime_error("not implemented");
+
+        _bitRepresentation = (char*) malloc(sizeof(char) * (_numBits + 1));
+        _bitRepresentation[_numBits] = '\0';
+
+        int currTestPos = _numPaddingBits;
+        int currArrPos = 0;
+        int bitStrPos = 0;
+        
+        // handle special case
+        if (_numBits == 0) {
+            _bitRepresentation[1] = '\0';
+            _bitRepresentation[0] = '0';
+            return;
+        }
+
+        while (bitStrPos < _numBits) {
+            // test if the bit is set
+            _bitRepresentation[bitStrPos] = (_bits[currArrPos] >> (63 - currTestPos)) & 1 ? '1' : '0';
+            bitStrPos += 1;
+            currTestPos += 1;
+            if (currTestPos > 63) {
+                currTestPos = 0;
+                currArrPos += 1;
+            }
+        }
     }
 
     void Uint64Bits::_setInternalsFromBase64(std::string sourceString) {
