@@ -163,6 +163,32 @@ test_hex_XOR/fast:
 .PHONY : test_hex_XOR/fast
 
 #=============================================================================
+# Target rules for targets named decode_single_byte_XOR_cipher
+
+# Build rule for target.
+decode_single_byte_XOR_cipher: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 decode_single_byte_XOR_cipher
+.PHONY : decode_single_byte_XOR_cipher
+
+# fast build rule for target.
+decode_single_byte_XOR_cipher/fast:
+	$(MAKE) -f set1/single_byte_XOR_cipher/CMakeFiles/decode_single_byte_XOR_cipher.dir/build.make set1/single_byte_XOR_cipher/CMakeFiles/decode_single_byte_XOR_cipher.dir/build
+.PHONY : decode_single_byte_XOR_cipher/fast
+
+#=============================================================================
+# Target rules for targets named test_decode_single_byte_XOR_cipher
+
+# Build rule for target.
+test_decode_single_byte_XOR_cipher: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_decode_single_byte_XOR_cipher
+.PHONY : test_decode_single_byte_XOR_cipher
+
+# fast build rule for target.
+test_decode_single_byte_XOR_cipher/fast:
+	$(MAKE) -f set1/single_byte_XOR_cipher/CMakeFiles/test_decode_single_byte_XOR_cipher.dir/build.make set1/single_byte_XOR_cipher/CMakeFiles/test_decode_single_byte_XOR_cipher.dir/build
+.PHONY : test_decode_single_byte_XOR_cipher/fast
+
+#=============================================================================
 # Target rules for targets named test_crypto_lib
 
 # Build rule for target.
@@ -187,6 +213,8 @@ help:
 	@echo "... test_hex_to_base64"
 	@echo "... hex_XOR"
 	@echo "... test_hex_XOR"
+	@echo "... decode_single_byte_XOR_cipher"
+	@echo "... test_decode_single_byte_XOR_cipher"
 	@echo "... test_crypto_lib"
 .PHONY : help
 
