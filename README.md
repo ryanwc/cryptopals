@@ -52,7 +52,19 @@ TLDR: Without padding, concatenating two Base64 encoded strings then decoding wi
 
 #### Challenge 1: Hex to Base 64
 
-- originally implementation translated hex string to array of bools representing the binary hex string val, then translated to base 64 from that
-  - this implementation was about 3x faster than another (working but unknown how much thought put into optimization) python implementation
-- new implementation translates hex string to array of uint64_t where the concatenation of binary vals of each uint64_t in the array represents the binary hex string val, then translates to base 64 from that
-  - new implementation was 4x faster than old implementation, so over an order of magnitude faster than the (again, maybe not optimized) python implementation
+- [Challenge 1 description](https://cryptopals.com/sets/1/challenges/1)
+- Originally implementation translated hex string to array of bools representing the binary hex string val, then translated to base 64 from that
+  - This implementation was about 3x faster than another (working but unknown how much thought put into optimization) python implementation
+- New implementation translates hex string to array of uint64_t where the concatenation of binary vals of each uint64_t in the array represents the binary hex string val, then translates to base 64 from that
+  - New implementation was 4x faster than old implementation, so over an order of magnitude faster than the (again, maybe not optimized) python implementation
+  - Interestingly, this timing changed again when I switched to C++17 standard and using some unique pointers in certain places instead of naked pointers. Both of these caused a slowdown, cumulatively about half as fast as before. I settled on using unique pointers only for the external API to a class I created for challenge 2, which seemed like a good compromise.
+
+### Challenge 2: XOR Hex Strings
+
+- [Challenge 2 description](https://cryptopals.com/sets/1/challenges/2)
+- I created a class called Uint64Bits that represnts some bits as an array uint64_t and provides several related functions (converting to hex, base64, bitstring, etc) that I hope can be reused in the other challenges.
+
+### Challenge 3: Single-Byte XOR Cipher
+
+- [Challenge 3 description](https://cryptopals.com/sets/1/challenges/3)
+- [Here's an explanation of what a single-byte XOR cipher is](https://wiki.bi0s.in/crypto/xor/#single-byte-xor-cipher)
