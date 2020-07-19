@@ -39,8 +39,9 @@ namespace CustomCrypto {
 	std::string DecodeSingleByteXORCipher(std::string hexString) {
 
 		// note: this could be generalized to work with original plaintext that
-		// has punctuation, other languages, etc. scoring could take into account length of ciphertext, 
-		// other vars. but we'll just assume English, and use simple alphabet char frequency to score.
+		// has more punctuation, other languages, etc. scoring could take into account length of ciphertext, 
+		// 2/3/etc letter tuple frequencies, other vars, etc.
+		// but we'll just assume English, and use simple alphabet char frequency to score.
 		CustomCrypto::Uint64Bits cipherBits(hexString, "hex", true);
 		int numUint64s = cipherBits.GetNumUint64s();
 		int numChars = cipherBits.GetNumBits() / 8;
@@ -48,39 +49,41 @@ namespace CustomCrypto {
 
 		// todo: use threadpool and compare performance
 		char* currString = (char*) malloc(sizeof(char) * numChars + 1);
-		double currLikelihood = 0.0;  // probably want log likelihood or else will get too small
-		currString[numChars] = '\0';
 		char* bestString = (char*) malloc(sizeof(char) * numChars + 1);
-		char* swapper = NULL;
-		double bestLikelihood = -1.0;
+		currString[numChars] = '\0';
 		bestString[numChars] = '\0';
+		char* swapper = NULL;
+		double currLikelihood = 0.0;  // probably want log likelihood or else will get too small
+		double bestLikelihood = -1.0;
 		uint8_t theByte = 0;
 		int startBitsPos;
 		int currStringPos;
 		char currChar;
 		while (true) {
+			// reset for new candidate string, to built from XORing given bits with 'next' byte
 			int startBitsPos = cipherBits.GetNumPaddingBits();
 			currStringPos = 0;
 			currLikelihood = 100.0;
+			// iterate the bits array
 			for (int i = 0; i < numUint64s; i++) {
+				// iterate the bits in this uint64_t, inspecting one char (from XORing with the byte) at a time
 				for (; startBitsPos < 64; startBitsPos += 8) { 
 					currChar = (rawCipherBits[i] >> (56 - startBitsPos)) | theByte;
+					currString[currStringPos] = currChar;
 
 					auto likelihoodIter = CryptolibConstants::charLikelihood.find(currChar);
 					if (likelihoodIter != CryptolibConstants::charLikelihood.end()) {
-						currString[currStringPos] = currChar;
 						currLikelihood *= likelihoodIter->second;
 						currStringPos += 1;
 						continue;
 					}
 					else if (stringOKifWeSkipChar(currStringPos, currChar, currString)) {
-						currString[currStringPos] = currChar;
 						// does not factor into likelihood, so this could break if XOR produces a string like
 						// "e-e-e-e-e-e" with common letters and puncuation that doesnt violate the simple rules.
 						currStringPos += 1;
 						continue;
 					}
-					
+					// it wasn't a char we know how to deal with -- throw this string out
 					goto endCandidacy;
 				}
 				startBitsPos = 0;
@@ -95,7 +98,7 @@ namespace CustomCrypto {
 
 		endCandidacy:
 			if (theByte == 255) {
-				break;
+				break;  // doing break in while(true) prevents dealing with uint8_t overflow
 			}
 			theByte += 1;
 		}
