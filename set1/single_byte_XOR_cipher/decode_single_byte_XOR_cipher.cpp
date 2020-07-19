@@ -53,8 +53,8 @@ namespace CustomCrypto {
 		currString[numChars] = '\0';
 		bestString[numChars] = '\0';
 		char* swapper = NULL;
-		double currLikelihood = 0.0;  // probably want log likelihood or else will get too small
-		double bestLikelihood = -1.0;
+		long double currLogLikelihood = 0.0;
+		long double bestLogLikelihood = -1.0;
 		uint8_t theByte = 0;
 		int startBitsPos;
 		int currStringPos;
@@ -63,7 +63,7 @@ namespace CustomCrypto {
 			// reset for new candidate string, to built from XORing given bits with 'next' byte
 			int startBitsPos = cipherBits.GetNumPaddingBits();
 			currStringPos = 0;
-			currLikelihood = 100.0;
+			currLogLikelihood = 0.0;
 			// iterate the bits array
 			for (int i = 0; i < numUint64s; i++) {
 				// iterate the bits in this uint64_t, inspecting one char (from XORing with the byte) at a time
@@ -71,9 +71,9 @@ namespace CustomCrypto {
 					currChar = (rawCipherBits[i] >> (56 - startBitsPos)) ^ theByte;
 					currString[currStringPos] = currChar;
 
-					auto likelihoodIter = CryptolibConstants::charLikelihood.find(currChar);
-					if (likelihoodIter != CryptolibConstants::charLikelihood.end()) {
-						currLikelihood *= likelihoodIter->second;
+					auto likelihoodIter = CryptolibConstants::charLogLikelihood.find(currChar);
+					if (likelihoodIter != CryptolibConstants::charLogLikelihood.end()) {
+						currLogLikelihood += likelihoodIter->second;
 						currStringPos += 1;
 						continue;
 					}
@@ -84,15 +84,14 @@ namespace CustomCrypto {
 						continue;
 					}
 					// it wasn't a char we know how to deal with -- throw this string out
-					std::cout << "got bad char, aborting: " << currChar << " in " << currString << " with likelihood " << currLikelihood << std::endl;
 					goto endCandidacy;
 				}
 				startBitsPos = 0;
 			}
 
-			if (currLikelihood > bestLikelihood || bestLikelihood < 0) {
-				std::cout << "found better likelihood: " << currLikelihood << " for string " << currString << std::endl;
-				bestLikelihood = currLikelihood;
+			if (currLogLikelihood > bestLogLikelihood || bestLogLikelihood < 0) {
+				std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << std::endl;
+				bestLogLikelihood = currLogLikelihood;
 				swapper = bestString;
 				bestString = currString;
 				currString = swapper;
