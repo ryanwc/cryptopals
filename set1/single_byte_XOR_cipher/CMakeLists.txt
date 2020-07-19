@@ -5,8 +5,11 @@ set (CMAKE_CXX_STANDARD 17)
 
 project(single_byte_XOR_cipher)
 
-# uses a function from challenge 1
-set(NON_MAIN_SOURCE_FILES decode_single_byte_XOR_cipher.cpp decode_single_byte_XOR_cipher.h ../../crypto_lib/uint64_bits.cpp ../../crypto_lib/uint64_bits.h)
+set(NON_MAIN_SOURCE_FILES 
+    decode_single_byte_XOR_cipher.cpp decode_single_byte_XOR_cipher.h 
+    ../../crypto_lib/uint64_bits.cpp ../../crypto_lib/uint64_bits.h
+    ../../crypto_lib/cryptolib_constants.h
+)
 set(SOURCE_FILES main.cpp ${NON_MAIN_SOURCE_FILES})
 
 

@@ -7,7 +7,7 @@
 int main(int argc, char** argv) {
 	std::string hexString;
 
-	if (argc == 1) {
+	if (argc == 2) {
 		hexString = argv[1];
 	}
 	else {
