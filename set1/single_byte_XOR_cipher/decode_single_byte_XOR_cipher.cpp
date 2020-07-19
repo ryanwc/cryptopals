@@ -40,7 +40,7 @@ namespace CustomCrypto {
 
 		// note: this could be generalized to work with original plaintext that
 		// has more punctuation, other languages, etc. scoring could take into account length of ciphertext, 
-		// 2/3/etc letter tuple frequencies, other vars, etc.
+		// 2/3/etc letter tuple frequencies, other vars, you name it, etc.
 		// but we'll just assume English, and use simple alphabet char frequency to score.
 		CustomCrypto::Uint64Bits cipherBits(hexString, "hex", true);
 		int numUint64s = cipherBits.GetNumUint64s();
@@ -68,7 +68,7 @@ namespace CustomCrypto {
 			for (int i = 0; i < numUint64s; i++) {
 				// iterate the bits in this uint64_t, inspecting one char (from XORing with the byte) at a time
 				for (; startBitsPos < 64; startBitsPos += 8) { 
-					currChar = (rawCipherBits[i] >> (56 - startBitsPos)) | theByte;
+					currChar = (rawCipherBits[i] >> (56 - startBitsPos)) ^ theByte;
 					currString[currStringPos] = currChar;
 
 					auto likelihoodIter = CryptolibConstants::charLikelihood.find(currChar);
@@ -79,17 +79,19 @@ namespace CustomCrypto {
 					}
 					else if (stringOKifWeSkipChar(currStringPos, currChar, currString)) {
 						// does not factor into likelihood, so this could break if XOR produces a string like
-						// "e-e-e-e-e-e" with common letters and puncuation that doesnt violate the simple rules.
+						// "e-e e-e-e.e" with common letters and puncuation/spacing that doesnt violate the simple rules.
 						currStringPos += 1;
 						continue;
 					}
 					// it wasn't a char we know how to deal with -- throw this string out
+					std::cout << "got bad char, aborting: " << currChar << " in " << currString << " with likelihood " << currLikelihood << std::endl;
 					goto endCandidacy;
 				}
 				startBitsPos = 0;
 			}
 
 			if (currLikelihood > bestLikelihood || bestLikelihood < 0) {
+				std::cout << "found better likelihood: " << currLikelihood << " for string " << currString << std::endl;
 				bestLikelihood = currLikelihood;
 				swapper = bestString;
 				bestString = currString;
