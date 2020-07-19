@@ -1,6 +1,7 @@
 #include <math.h>
 #include <iostream>
 #include <map>
+#include <thread>
 
 #include "../../crypto_lib/uint64_bits.h"
 #include "../../crypto_lib/cryptolib_constants.h"
@@ -36,7 +37,9 @@ namespace CustomCrypto {
 		return false;
 	}
 
-	std::string DecodeSingleByteXORCipher(std::string hexString) {
+	std::string DecodeSingleByteXORCipher(std::string hexString, int numThreads) {
+
+		std::cout << "using " << numThreads << " threads" << std::endl;
 
 		// note: this could be generalized to work with original plaintext that
 		// has more punctuation, other languages, etc. scoring could take into account length of ciphertext, 

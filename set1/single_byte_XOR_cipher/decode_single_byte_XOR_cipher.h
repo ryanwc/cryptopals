@@ -6,7 +6,7 @@
 
 namespace CustomCrypto {
 
-    std::string DecodeSingleByteXORCipher(std::string hexString);
+    std::string DecodeSingleByteXORCipher(std::string hexString, int numThreads);
 }
 
 #endif // DECODE_SINGLE_BYTE_XOR_CIPHER_H

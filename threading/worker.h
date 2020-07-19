@@ -1,0 +1,4 @@
+#ifndef THREADING_WORKER_H__
+#define THREADING_WORKER_H__
+
+#endif // THREADING_WORKER
