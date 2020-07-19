@@ -73,12 +73,12 @@ namespace CustomCrypto {
 						currStringPos += 1;
 						continue;
 					}
-
-					if (stringOKifWeSkipChar(currStringPos, currChar, currString)) {
+					else if (stringOKifWeSkipChar(currStringPos, currChar, currString)) {
 						currString[currStringPos] = currChar;
 						// does not factor into likelihood, so this could break if XOR produces a string like
 						// "e-e-e-e-e-e" with common letters and puncuation that doesnt violate the simple rules.
 						currStringPos += 1;
+						continue;
 					}
 					
 					goto endCandidacy;
