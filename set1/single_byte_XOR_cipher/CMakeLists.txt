@@ -17,16 +17,10 @@ set(SOURCE_FILES main.cpp ${NON_MAIN_SOURCE_FILES})
 add_executable(decode_single_byte_XOR_cipher ${SOURCE_FILES})
 
 
-# boost threading
-find_package(Boost COMPONENTS thread REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-target_link_libraries(decode_single_byte_XOR_cipher Boost::thread)
-
-
 # link against gtest or gtest_main as needed
 set(TEST_SOURCE_FILES test_main.cpp test_decode_single_byte_XOR_cipher.cpp ${NON_MAIN_SOURCE_FILES})
 
 add_executable(test_decode_single_byte_XOR_cipher ${TEST_SOURCE_FILES})
 
-target_link_libraries(test_decode_single_byte_XOR_cipher gtest gtest_main pthread Boost::thread)
+target_link_libraries(test_decode_single_byte_XOR_cipher gtest gtest_main pthread)
 add_test(test_decode_single_byte_XOR_cipher test_decode_single_byte_XOR_cipher)
