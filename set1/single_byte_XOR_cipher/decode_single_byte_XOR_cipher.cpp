@@ -54,7 +54,7 @@ namespace CustomCrypto {
 		bestString[numChars] = '\0';
 		char* swapper = NULL;
 		long double currLogLikelihood = 0.0;
-		long double bestLogLikelihood = -1.0;
+		long double bestLogLikelihood = 1.0;
 		uint8_t theByte = 0;
 		int startBitsPos;
 		int currStringPos;
@@ -89,8 +89,8 @@ namespace CustomCrypto {
 				startBitsPos = 0;
 			}
 
-			if (currLogLikelihood > bestLogLikelihood || bestLogLikelihood < 0) {
-				std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << std::endl;
+			if (currLogLikelihood > bestLogLikelihood || bestLogLikelihood > 0) {
+				//std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << std::endl;
 				bestLogLikelihood = currLogLikelihood;
 				swapper = bestString;
 				bestString = currString;
@@ -109,6 +109,11 @@ namespace CustomCrypto {
 		swapper = NULL;
 		free(currString);
 		free(bestString);
+
+		if (bestLogLikelihood > 0) {
+			throw std::runtime_error("could not find any likely decoded strings using English alphabet with minimal puncuation");
+		}
+
 		return bestGuess;
 	}
 }
