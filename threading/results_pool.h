@@ -7,10 +7,17 @@
 #include <condition_variable>
 #include <memory>
 #include <functional>
+#include <exception>
 
 
 namespace CustomThreading
 {
+    struct NoMoreWorkException : public std::exception {
+        const char * what () const throw ()
+        {
+            return "There's no more work to do";
+        }
+    };
 
     // use partial template specialization to "unwrap" a function signature (e.g. bool(int, int))
     // https://stackoverflow.com/questions/27604128/c-stdfunction-like-template-syntax
@@ -33,6 +40,7 @@ namespace CustomThreading
      * and returns a float, would template like ResultsPool<float(int, bool)> or ResultsPool<decltype(myFunc)>. 
      * Caveat 1: using decltype(myFunc) will not compile if myFunc is overloaded.
      * Caveat 2: does not work (or at least is not tested yet) with member functions.
+     * Caveat 3: currently assumes workers complete their work (e.g., no exceptions, hung workers).
      * 
      * Trivial Example:
      * 
@@ -74,7 +82,8 @@ namespace CustomThreading
             PoolResultsFuncPtr ResultsFuncPtr;
 
             /* 
-             * Enumerate possible states of a ResultPool
+             * Enumerate possible states of a ResultPool.
+             * NOTE: this isn't used right now
              */
             enum Status { 
                 STOPPED = 0,  // none of the workers are active.
@@ -89,18 +98,21 @@ namespace CustomThreading
              * when work is subitted.
              */
 			ResultsPool(int numThreads, PoolResultsFuncPtr resultsFuncPtr) {
+                _status = STOPPED;
                 _numThreads = numThreads;
                 ResultsFuncPtr = resultsFuncPtr;
                 _workers = std::make_unique<std::thread[]>(numThreads);
                 _workerResultsMutexes = std::make_unique<std::mutex[]>(numThreads);
-
-                for (int i = 0; i < _numThreads; i++) {
-                    _workers[i] = std::thread(&ResultsPool::_WorkerLoop, this, i);
-                }
+                _StartWorkers();
             }
 
+            /*
+             * Stop/kill all workers so no zombie threads.
+             * Finishes all previously submitted work first.
+             * TODO: API to kill hung workers or stop before all results ready.
+             */ 
 			~ResultsPool() {
-
+                _StopWorkers();
             }
 
             /*
@@ -122,7 +134,10 @@ namespace CustomThreading
              * Gets the number of 'jobs' in the work queue (i.e. have not yet be picked up by a worker). 
              */
             int GetSizeOfWorkQueue() {
-
+                _workQueueMutex.lock();
+                int size = _workQueue.size();
+                _workQueueMutex.unlock();
+                return size;
             }
 
             /*
@@ -133,31 +148,65 @@ namespace CustomThreading
                 _workQueue.push(std::bind(ResultsFuncPtr, args...));
                 _workQueueMutex.unlock();
                 _addedWorkCondition.notify_one();
+                _numSubmissionsSinceLastGet += 1;
             }
 
             /*
-             * Blocks the caller until all previously submitted work has been completed, 
+             * Blocks the caller until all work submitted since last "get" has been completed, 
              * then returns a list of the results.
              */
             std::vector<RetT> WaitForAllResults() {
-                return std::vector<RetT>(5);
+                _StopWorkers();
+                std::vector<RetT> results(_numSubmissionsSinceLastGet);
+                _numSubmissionsSinceLastGet = 0;
+                std::vector<RetT>* workerResultsPtr = _workerResults.get();
+                for (int i = 0; i < _numThreads; i++) {
+                    results.insert(results.end(), workerResultsPtr[i].begin(), workerResultsPtr[i].end());
+                }
+                return results;
             }
 
             /*
              * Retrieves all results from already-completed work.
              * The pool will 'forget' the retrieved results, so the caller should save them if desired.
              */
-            std::vector<RetT> GetAvailableResults();
+            std::vector<RetT> GetAvailableResults() {
+                throw std::runtime_error("not implemented");
+            }
 
             // TODO: some way for client to say:
             // "workers, if your results list gets X full, write out / return results to Y before doing more work"
 
 		private:
 
-            // kill a worker currently alive in the pool
-			static void _EndWorker();
+            /*
+             * Stops (terminates) all workers, waiting for them to finish all submitted work first.
+             */
+			void _StopWorkers() {
+                if (_status != STOPPED) {
+
+                    _workQueueMutex.lock();
+                    for (int i = 0; i < _numThreads; i++) {
+                        _workQueue.push(std::bind(_StopFunc));
+                    }
+                    _workQueueMutex.unlock();
+                    _addedWorkCondition.notify_all();
+
+                    for (int i = 0; i < _numThreads; i++) {
+                        _workers[i].join();
+                    }
+                }
+                _status = STOPPED;
+            }
+
             // start all workers in the pool
-            void _StartWorkers();
+            void _StartWorkers() {
+                _status = STARTING;
+                for (int i = 0; i < _numThreads; i++) {
+                    _workers[i] = std::thread(&ResultsPool::_WorkerLoop, this, i);
+                }
+                _status = WORKING;
+            }
 
             // the entry point for pool worker threadss
             void _WorkerLoop(int workerNum) {
@@ -168,21 +217,36 @@ namespace CustomThreading
 
                     myQueueLock.lock();
                     _addedWorkCondition.wait(myQueueLock, [this]{ return _workQueue.size() > 0; });
+
                     
                     std::function<RetT(void)> nextBoundFunc = _workQueue.front();
                     _workQueue.pop();
                     myQueueLock.unlock();
                     _addedWorkCondition.notify_one();
 
-                    // TODO: stop worker
+                    RetT result;
+                    try {
+                        result = nextBoundFunc();
+                    }
+                    catch (const NoMoreWorkException& err) {
+                        break;
+                    }
 
-                    RetT result = nextBoundFunc();
                     myResultsLock.lock();
                     _workerResults.get()[workerNum].push_back(result);
                     // TODO: if (results too full) { write out results }
                     myResultsLock.unlock();
                 }
             }
+
+            /**
+             * Push to the work queue to cause the worker who gets it to exit.
+             */
+            static RetT _StopFunc() {
+                throw NoMoreWorkException();
+            }
+
+            int _numSubmissionsSinceLastGet;
 
             // status of this pool
             Status _status;
