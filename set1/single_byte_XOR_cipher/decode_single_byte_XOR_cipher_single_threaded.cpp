@@ -94,7 +94,7 @@ namespace CustomCrypto {
 			}
 
 			if (currLogLikelihood > bestLogLikelihood || bestLogLikelihood > 0) {
-				//std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << std::endl;
+				std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << " from byte " << theByte << std::endl;
 				bestLogLikelihood = currLogLikelihood;
 				swapper = bestString;
 				bestString = currString;

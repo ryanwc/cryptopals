@@ -49,17 +49,17 @@ namespace CustomCrypto {
 		// has more punctuation, other languages, etc. scoring could take into account length of ciphertext, 
 		// 2/3/etc letter tuple frequencies, other vars, you name it, etc.
 		// but we'll just assume English, and use simple alphabet char frequency to score.
-
+		//std::cout << "working doing byte " << theByte << std::endl;
 		char* decodedString = (char*) malloc(sizeof(char) * numChars + 1);
 		decodedString[numChars] = '\0';
-		long double logLikelihood = 1.0;
+		long double logLikelihood = 0.0;
 		int currStringPos = 0;
 		char currChar;
 		int startBitsPos = startPadding;
 		// iterate the bits in this uint64_t, inspecting one char (from XORing with the byte) at a time
 		for (int i = 0; i < numUint64s; i++) {
 			for (; startBitsPos < 64; startBitsPos += 8) { 
-				currChar = (encodedBits[numUint64s] >> (56 - startBitsPos)) ^ theByte;
+				currChar = (encodedBits[i] >> (56 - startBitsPos)) ^ theByte;
 				decodedString[currStringPos] = currChar;
 
 				auto likelihoodIter = CryptolibConstants::charLogLikelihood.find(currChar);
@@ -75,6 +75,8 @@ namespace CustomCrypto {
 					continue;
 				}
 				// it wasn't a char we know how to deal with -- throw this string out
+				//std::cout << "encounted stop condition at " << decodedString << std::endl;
+				logLikelihood = 0.0;
 				goto doneDecoding;
 			}
 			startBitsPos = 0;
@@ -106,20 +108,20 @@ namespace CustomCrypto {
 			theByte += 1;
 		}
 
-		long double bestLogLikelihood = 1.0;
+		long double bestLogLikelihood = 0;
 		long double currLogLikelihood;
 		std::string bestGuess = "";
 		auto bestGuesses = pool.WaitForAllResults();
 
 		for (int i = 0; i < bestGuesses.size(); i++) {
 			currLogLikelihood = std::get<0>(bestGuesses[i]);
-			if (currLogLikelihood < 0 && currLogLikelihood > bestLogLikelihood) {
+			if (currLogLikelihood < 0 && (currLogLikelihood > bestLogLikelihood || bestLogLikelihood == 0)) {
 				bestLogLikelihood = currLogLikelihood;
 				bestGuess = std::get<1>(bestGuesses[i]);
 			}
 		}
 
-		if (bestLogLikelihood > 0) {
+		if (bestLogLikelihood == 0) {
 			throw std::runtime_error("could not find any likely decoded strings using English alphabet with minimal puncuation");
 		}
 

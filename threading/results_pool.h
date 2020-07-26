@@ -83,7 +83,6 @@ namespace CustomThreading
 
             /* 
              * Enumerate possible states of a ResultPool.
-             * NOTE: this isn't used right now
              */
             enum Status { 
                 STOPPED = 0,  // none of the workers are active.
@@ -99,9 +98,11 @@ namespace CustomThreading
              */
 			ResultsPool(int numThreads, PoolResultsFuncPtr resultsFuncPtr) {
                 _status = STOPPED;
+                _numSubmissionsSinceLastGet = 0;
                 _numThreads = numThreads;
                 ResultsFuncPtr = resultsFuncPtr;
                 _workers = std::make_unique<std::thread[]>(numThreads);
+                _workerResults = std::make_unique< std::vector<RetT>[] >(numThreads);
                 _workerResultsMutexes = std::make_unique<std::mutex[]>(numThreads);
                 _StartWorkers();
             }
@@ -157,7 +158,8 @@ namespace CustomThreading
              */
             std::vector<RetT> WaitForAllResults() {
                 _StopWorkers();
-                std::vector<RetT> results(_numSubmissionsSinceLastGet);
+                std::vector<RetT> results;
+                results.reserve(_numSubmissionsSinceLastGet);
                 _numSubmissionsSinceLastGet = 0;
                 std::vector<RetT>* workerResultsPtr = _workerResults.get();
                 for (int i = 0; i < _numThreads; i++) {
@@ -201,21 +203,21 @@ namespace CustomThreading
 
             // start all workers in the pool
             void _StartWorkers() {
-                _status = STARTING;
-                for (int i = 0; i < _numThreads; i++) {
-                    _workers[i] = std::thread(&ResultsPool::_WorkerLoop, this, i);
+                if (_status == STOPPED) {
+                    _status = STARTING;
+                    for (int i = 0; i < _numThreads; i++) {
+                        _workers[i] = std::thread(&ResultsPool::_WorkerLoop, this, i);
+                    }
+                    _status = WORKING;
                 }
-                _status = WORKING;
             }
 
             // the entry point for pool worker threadss
             void _WorkerLoop(int workerNum) {
 
-                std::unique_lock<std::mutex> myQueueLock(_workQueueMutex);
-                std::unique_lock<std::mutex> myResultsLock(_workerResultsMutexes[workerNum]);
                 while (true) {
 
-                    myQueueLock.lock();
+                    std::unique_lock<std::mutex> myQueueLock(_workQueueMutex);
                     _addedWorkCondition.wait(myQueueLock, [this]{ return _workQueue.size() > 0; });
 
                     
@@ -231,9 +233,11 @@ namespace CustomThreading
                     catch (const NoMoreWorkException& err) {
                         break;
                     }
+                    // TODO: handle other errors
 
-                    myResultsLock.lock();
-                    _workerResults.get()[workerNum].push_back(result);
+                    // using a mutex here enables GetAvailableResults() API
+                    std::unique_lock<std::mutex> myResultsLock(_workerResultsMutexes[workerNum]);
+                    _workerResults[workerNum].push_back(result);
                     // TODO: if (results too full) { write out results }
                     myResultsLock.unlock();
                 }
@@ -259,7 +263,7 @@ namespace CustomThreading
 			std::unique_ptr<std::thread[]> _workers;
 
             // each worker has its own results list so do not have to syncronize so often
-            std::unique_ptr< std::vector<RetT> > _workerResults;
+            std::unique_ptr< std::vector<RetT>[] > _workerResults;
 
             // need a mutex so master thread can safely access each worker result list
             std::unique_ptr<std::mutex[]> _workerResultsMutexes;
