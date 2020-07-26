@@ -13,23 +13,21 @@ namespace CustomThreading
 {
 
     // use partial template specialization to "unwrap" a function signature (e.g. bool(int, int))
+    // https://stackoverflow.com/questions/27604128/c-stdfunction-like-template-syntax
     template<typename ResultsFuncSig>
-    class ResultsPool {};
+    class ResultsPool {};  // TODO: raise not-implemented error in constructor?
 
     /*
-     * Pool for distributing work to worker threads, then retrieiving
-     * results from those worker threads after all work is completed.
-     * Abstracts away threading details (e.g. syncronization on work queue), 
-     * client just needs to use public API.
+     * Pool for distributing work to worker threads, then retrieiving results from those worker threads.
+     * Abstracts away threading details (e.g. sync on work queue), client just needs to use public API.
      * Templated by the return type and arg types of the results func passed as a poniter to the
      * constructor. Results func is the func that will be executed by pool workers on work submission.
-     * Must use std::function-style templating, e.g. to use a results function
-     * that takes an int, a bool, and returns a float, would template like
-     * ResultsPool<float(int, bool)>. So, can use with decltype() since that is what is returned
-     * for functions.
+     * Must use std::function-style templating, e.g. to use a results function that takes an int, a bool, 
+     * and returns a float, would template like ResultsPool<float(int, bool)>. 
+     * So, can use with decltype() since that is what is returned for functions.
      * Caveat 1: using decltype(myFunc) will not compile if myFunc is overloaded.
-     *   but can still provide the signature without using decltype.
-     * Caveat 2: does not work with member functions.
+     *   but you can still provide the types in code without using decltype.
+     * Caveat 2: does not work (or at least is not tested yet) with member functions.
      * Example:
      *   float foo(int one, bool two) { return 2.0; };
      *   ResultsPool<decltype(foo)> fooResultsPool(foo);
@@ -116,11 +114,11 @@ namespace CustomThreading
             // keep track of the workers in the pool
 			std::unique_ptr<std::thread[]> _workers;
             // each worker has its own results list so do not have to syncronize so often
-            std::unique_ptr<std::vector<RetT>> _workerResults;
+            std::unique_ptr< std::vector<RetT> > _workerResults;
             // need a mutex so master thread can safely access each worker result list
             std::unique_ptr<std::mutex> _workerResultsMutexes;
             // the queue of work workers pull work from
-            std::queue<std::tuple<ArgTs...>> _workQueue;
+            std::queue< std::tuple<ArgTs...> > _workQueue;
             // the signal from master to workers that work has been added to the queue
 			std::condition_variable _addedWorkCondition;
             // need to sync on the work queue
