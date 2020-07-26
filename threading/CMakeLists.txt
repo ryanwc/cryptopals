@@ -5,7 +5,7 @@ set (CMAKE_CXX_STANDARD 17)
 
 project(results_pool)
 
-set(SOURCE_FILES results_pool.h results_pool.cpp)
+set(SOURCE_FILES results_pool.h)
 
 # link against gtest or gtest_main as needed
 set(TEST_SOURCE_FILES test_main.cpp test_results_pool.cpp ${SOURCE_FILES})

@@ -3,6 +3,7 @@
 #include <map>
 #include <thread>
 
+#include "../../threading/results_pool.h"
 #include "../../crypto_lib/uint64_bits.h"
 #include "../../crypto_lib/cryptolib_constants.h"
 #include "decode_single_byte_XOR_cipher.h"
