@@ -16,6 +16,7 @@ set(SOURCE_FILES main.cpp ${NON_MAIN_SOURCE_FILES})
 
 # the actual program
 add_executable(decode_single_byte_XOR_cipher ${SOURCE_FILES})
+target_link_libraries(decode_single_byte_XOR_cipher pthread)
 
 
 # link against gtest or gtest_main as needed

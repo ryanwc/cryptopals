@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <thread>
+#include <tuple>
 
 #include "../../threading/results_pool.h"
 #include "../../crypto_lib/uint64_bits.h"
@@ -38,81 +39,85 @@ namespace CustomCrypto {
 		return false;
 	}
 
-	std::string DecodeSingleByteXORCipher(std::string hexString, int numThreads) {
-
-		std::cout << "using " << numThreads << " threads" << std::endl;
+	/*
+	 * Worker func. Returns the likelihood/string combo of decoding the given encoded bits with the given byte.
+	 */
+	std::tuple<long double, std::string> GetLikelihoodOfByteCipher(
+			uint64_t* encodedBits, int numUint64s, uint8_t theByte, int startPadding, int numChars) {
 
 		// note: this could be generalized to work with original plaintext that
 		// has more punctuation, other languages, etc. scoring could take into account length of ciphertext, 
 		// 2/3/etc letter tuple frequencies, other vars, you name it, etc.
 		// but we'll just assume English, and use simple alphabet char frequency to score.
+
+		char* decodedString = (char*) malloc(sizeof(char) * numChars + 1);
+		decodedString[numChars] = '\0';
+		long double logLikelihood = 1.0;
+		int currStringPos = 0;
+		char currChar;
+		int startBitsPos = startPadding;
+		// iterate the bits in this uint64_t, inspecting one char (from XORing with the byte) at a time
+		for (int i = 0; i < numUint64s; i++) {
+			for (; startBitsPos < 64; startBitsPos += 8) { 
+				currChar = (encodedBits[numUint64s] >> (56 - startBitsPos)) ^ theByte;
+				decodedString[currStringPos] = currChar;
+
+				auto likelihoodIter = CryptolibConstants::charLogLikelihood.find(currChar);
+				if (likelihoodIter != CryptolibConstants::charLogLikelihood.end()) {
+					logLikelihood += likelihoodIter->second;
+					currStringPos += 1;
+					continue;
+				}
+				else if (stringOKifWeSkipChar(currStringPos, currChar, decodedString)) {
+					// does not factor into likelihood, so this could break if XOR produces a string like
+					// "e-e e-e-e.e" with common letters and puncuation/spacing that doesnt violate the simple rules.
+					currStringPos += 1;
+					continue;
+				}
+				// it wasn't a char we know how to deal with -- throw this string out
+				goto doneDecoding;
+			}
+			startBitsPos = 0;
+		}
+
+	doneDecoding:
+		std::string theGuess = decodedString;
+		free(decodedString);
+		return std::tuple<long double, std::string>(logLikelihood, theGuess);
+	}
+
+	std::string DecodeSingleByteXORCipher(std::string hexString, int numThreads) {
+
+		CustomThreading::ResultsPool<decltype(GetLikelihoodOfByteCipher)> pool(numThreads, &GetLikelihoodOfByteCipher);
+
+		// could also pass in ref to result array instead of returning tuple from result func 
+		// but let's try out the results-passing feature of ResultsPool
+		// or could do something like "pass in one byte at a time, free workers do it and sync on 'best' vars"
 		CustomCrypto::Uint64Bits cipherBits(hexString, "hex", true);
 		int numUint64s = cipherBits.GetNumUint64s();
 		int numChars = cipherBits.GetNumBits() / 8;
+		int startPadding  = cipherBits.GetNumPaddingBits();
 		std::unique_ptr<uint64_t[]> rawCipherBits = cipherBits.GetBits();
-
-		// todo: use threadpool and compare performance
-		char* currString = (char*) malloc(sizeof(char) * numChars + 1);
-		char* bestString = (char*) malloc(sizeof(char) * numChars + 1);
-		currString[numChars] = '\0';
-		bestString[numChars] = '\0';
-		char* swapper = NULL;
-		long double currLogLikelihood = 0.0;
-		long double bestLogLikelihood = 1.0;
+		uint64_t* bitsPtr = rawCipherBits.get();
 		uint8_t theByte = 0;
-		int startBitsPos;
-		int currStringPos;
-		char currChar;
 		while (true) {
-			// reset for new candidate string, to built from XORing given bits with 'next' byte
-			int startBitsPos = cipherBits.GetNumPaddingBits();
-			currStringPos = 0;
-			currLogLikelihood = 0.0;
-			// iterate the bits array
-			for (int i = 0; i < numUint64s; i++) {
-				// iterate the bits in this uint64_t, inspecting one char (from XORing with the byte) at a time
-				for (; startBitsPos < 64; startBitsPos += 8) { 
-					currChar = (rawCipherBits[i] >> (56 - startBitsPos)) ^ theByte;
-					currString[currStringPos] = currChar;
-
-					auto likelihoodIter = CryptolibConstants::charLogLikelihood.find(currChar);
-					if (likelihoodIter != CryptolibConstants::charLogLikelihood.end()) {
-						currLogLikelihood += likelihoodIter->second;
-						currStringPos += 1;
-						continue;
-					}
-					else if (stringOKifWeSkipChar(currStringPos, currChar, currString)) {
-						// does not factor into likelihood, so this could break if XOR produces a string like
-						// "e-e e-e-e.e" with common letters and puncuation/spacing that doesnt violate the simple rules.
-						currStringPos += 1;
-						continue;
-					}
-					// it wasn't a char we know how to deal with -- throw this string out
-					goto endCandidacy;
-				}
-				startBitsPos = 0;
-			}
-
-			if (currLogLikelihood > bestLogLikelihood || bestLogLikelihood > 0) {
-				//std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << std::endl;
-				bestLogLikelihood = currLogLikelihood;
-				swapper = bestString;
-				bestString = currString;
-				currString = swapper;
-			}
-
-		endCandidacy:
-			if (theByte == 255) {
-				break;  // doing break in while(true) prevents dealing with uint8_t overflow
-			}
+			pool.SubmitWork(bitsPtr, numUint64s, theByte, startPadding, numChars);
+			if (theByte == 255) { break; }
 			theByte += 1;
 		}
 
+		long double bestLogLikelihood = 1.0;
+		long double currLogLikelihood;
+		std::string bestGuess = "";
+		auto bestGuesses = pool.WaitForAllResults();
 
-		std::string bestGuess = bestString;
-		swapper = NULL;
-		free(currString);
-		free(bestString);
+		for (int i = 0; i < bestGuesses.size(); i++) {
+			currLogLikelihood = std::get<0>(bestGuesses[i]);
+			if (currLogLikelihood < 0 && currLogLikelihood > bestLogLikelihood) {
+				bestLogLikelihood = currLogLikelihood;
+				bestGuess = std::get<1>(bestGuesses[i]);
+			}
+		}
 
 		if (bestLogLikelihood > 0) {
 			throw std::runtime_error("could not find any likely decoded strings using English alphabet with minimal puncuation");

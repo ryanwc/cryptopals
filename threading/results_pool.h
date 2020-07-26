@@ -1,7 +1,6 @@
 #ifndef RESULTS_POOL_H__
 #define RESULTS_POOL_H__
 
-#include <tuple>
 #include <thread>
 #include <queue>
 #include <mutex>
@@ -140,13 +139,18 @@ namespace CustomThreading
              * Blocks the caller until all previously submitted work has been completed, 
              * then returns a list of the results.
              */
-            std::vector<RetT> WaitForAllResults();
+            std::vector<RetT> WaitForAllResults() {
+                return std::vector<RetT>(5);
+            }
 
             /*
              * Retrieves all results from already-completed work.
              * The pool will 'forget' the retrieved results, so the caller should save them if desired.
              */
             std::vector<RetT> GetAvailableResults();
+
+            // TODO: some way for client to say:
+            // "workers, if your results list gets X full, write out / return results to Y before doing more work"
 
 		private:
 
@@ -174,7 +178,8 @@ namespace CustomThreading
 
                     RetT result = nextBoundFunc();
                     myResultsLock.lock();
-                    _workerResults[workerNum].push(result);
+                    _workerResults.get()[workerNum].push_back(result);
+                    // TODO: if (results too full) { write out results }
                     myResultsLock.unlock();
                 }
             }
