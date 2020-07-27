@@ -7,8 +7,10 @@
 
 namespace {
 
-    TEST(Tautology_Test, Tautology_succeeds) {
-        ASSERT_STREQ(std::string("0").c_str(), std::string("0").c_str());
+    TEST(Cryptopals_Test, TheirExample_succeeds) {
+        ASSERT_STREQ(std::string("Cooking MC's like a pound of bacon").c_str(), 
+                     CustomCrypto::DecodeSingleByteXORCipher("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736", 4).c_str()
+        );
     }
 
 }  // namespace
