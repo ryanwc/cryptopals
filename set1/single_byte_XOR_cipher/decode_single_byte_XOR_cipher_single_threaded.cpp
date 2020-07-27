@@ -38,9 +38,10 @@ namespace CustomCrypto {
 		return false;
 	}
 
+	// ignores numThreads arg and just does everything in this thread
 	std::string DecodeSingleByteXORCipher(std::string hexString, int numThreads) {
 
-		std::cout << "using " << numThreads << " threads" << std::endl;
+		//std::cout << "using " << numThreads << " threads" << std::endl;
 
 		// note: this could be generalized to work with original plaintext that
 		// has more punctuation, other languages, etc. scoring could take into account length of ciphertext, 
@@ -94,7 +95,7 @@ namespace CustomCrypto {
 			}
 
 			if (currLogLikelihood > bestLogLikelihood || bestLogLikelihood > 0) {
-				std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << " from byte " << theByte << std::endl;
+				//std::cout << "found better likelihood: " << currLogLikelihood << " for string \"" << currString << "\"" << " from byte " << theByte << std::endl;
 				bestLogLikelihood = currLogLikelihood;
 				swapper = bestString;
 				bestString = currString;

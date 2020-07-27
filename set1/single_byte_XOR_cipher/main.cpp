@@ -25,16 +25,16 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	/* performance measurement
+	// performance measurement
 	int currExecution = 0;
 	int numExecutions = 10000;
 	auto start = std::chrono::high_resolution_clock::now();
 	while (currExecution < numExecutions) {
-		CustomCrypto::DecodeSingleByteXORCipher("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736");
+		CustomCrypto::DecodeSingleByteXORCipher("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736", numThreads);
 		currExecution += 1;
 	}
 	auto stop = std::chrono::high_resolution_clock::now();
 	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() << std::endl;
-	*/
+	//
 	return EXIT_SUCCESS;
 }
